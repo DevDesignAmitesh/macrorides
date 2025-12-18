@@ -1,0 +1,279 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum driverStatus {
+  OFFLINE
+  ONLINE
+  ON_RIDE
+  ON_DELIVERY
+  SUSPENDED
+}
+
+enum rideStatus {
+  REQUESTED
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+enum vendorType {
+  FOOD
+  CLOTHING
+}
+
+enum kitchenState {
+  OPEN
+  CLOSED
+  KITCHEN_BUSY
+}
+
+enum operationalState {
+  OPEN
+  CLOSED
+  MAINTAINANCE
+}
+
+enum locationLabel {
+  HOME
+  WORK
+  OUTLET
+  PICKUP
+  DROP
+}
+
+model Account {
+  id         String  @id @default(uuid())
+  phone      String  @unique
+  email      String?
+  name       String
+  isVerified Boolean
+
+  customer    Customer?
+  vendorOwner VendorOwner?
+  driver      Driver?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Customer {
+  id        String  @id @default(uuid())
+  accountId String  @unique
+  account   Account @relation(references: [id], fields: [accountId])
+
+  location  UserSavedLocation[]
+  rides     Rides[]
+  FoodOrder FoodOrder[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VendorOwner {
+  id        String  @id @default(uuid())
+  accountId String  @unique
+  account   Account @relation(references: [id], fields: [accountId])
+
+  vendorOwner Vendor?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Vendor {
+  id         String     @id @default(uuid())
+  name       String
+  type       vendorType
+  isVerified Boolean
+
+  location VendorSavedLocation[]
+
+  ownerId String      @unique
+  owner   VendorOwner @relation(references: [id], fields: [ownerId])
+
+  foodVendor  FoodVendor?
+  clothVendor ClothVendor?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model FoodVendor {
+  id       String @id @default(uuid())
+  vendorId String @unique
+  vendor   Vendor @relation(references: [id], fields: [vendorId])
+
+  fssaiNumber    String
+  kitchenState   kitchenState
+  foodCategories FoodCategories[]
+  FoodOrder      FoodOrder[]
+
+  openingTime DateTime
+  closingTime DateTime
+  is247       Boolean
+}
+
+model ClothVendor {
+  id                 String               @id @default(uuid())
+  vendorId           String               @unique
+  vendor             Vendor               @relation(references: [id], fields: [vendorId])
+  clothingCategories ClothingCategories[]
+
+  returnPolicy     String
+  operationalState operationalState
+}
+
+model Driver {
+  id         String  @id @default(uuid())
+  accountId  String  @unique
+  account    Account @relation(references: [id], fields: [accountId])
+  isVerified Boolean
+
+  Rides    Rides[]
+  location DriverLocation?
+  status   DriverStatus?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DriverStatus {
+  id       String @id @default(uuid())
+  driverId String @unique
+  driver   Driver @relation(references: [id], fields: [driverId])
+
+  status    driverStatus
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model Location {
+  id        String        @id @default(uuid())
+  latitude  Float
+  longitude Float
+  address   String
+  label     locationLabel
+
+  UserSavedLocation   UserSavedLocation[]
+  VendorSavedLocation VendorSavedLocation[]
+
+  deliveryLocation FoodOrder[] @relation("deliveryLocation")
+  pickupLocation   Rides[]     @relation("pickupLocation")
+  dropLocation     Rides[]     @relation("dropLocation")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserSavedLocation {
+  id String @id @default(uuid())
+
+  customerId String
+  customer   Customer @relation(references: [id], fields: [customerId])
+
+  locationId String
+  location   Location @relation(references: [id], fields: [locationId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VendorSavedLocation {
+  id     String @id @default(uuid())
+  number String
+
+  locationId String
+  location   Location @relation(references: [id], fields: [locationId])
+
+  vendorId String
+  vendor   Vendor @relation(references: [id], fields: [vendorId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DriverLocation {
+  id       String @id @default(uuid())
+  driverId String @unique
+  driver   Driver @relation(references: [id], fields: [driverId])
+
+  latitude  Float
+  longitude Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Categories {
+  id   String @id @default(uuid())
+  name String
+
+  foodCategories     FoodCategories[]
+  clothingCategories ClothingCategories[]
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+}
+
+model FoodCategories {
+  id           String     @id @default(uuid())
+  foodVendorId String
+  foodVendor   FoodVendor @relation(references: [id], fields: [foodVendorId])
+
+  categoriesId String
+  categoried   Categories @relation(references: [id], fields: [categoriesId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ClothingCategories {
+  id String @id @default(uuid())
+
+  foodVendorId String
+  foodVendor   ClothVendor @relation(references: [id], fields: [foodVendorId])
+
+  categoriesId String
+  categoried   Categories @relation(references: [id], fields: [categoriesId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Rides {
+  id String @id @default(uuid())
+
+  customerId String
+  customer   Customer @relation(references: [id], fields: [customerId])
+
+  driverId String
+  driver   Driver @relation(references: [id], fields: [driverId])
+
+  status rideStatus
+
+  pickupLocationId String
+  pickupLocation   Location @relation("pickupLocation", references: [id], fields: [pickupLocationId])
+
+  dropLocationId String
+  dropLocation   Location @relation("dropLocation", references: [id], fields: [dropLocationId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FoodOrder {
+  id String @id @default(uuid())
+  // status foodOrder // should define this
+
+  customerId String
+  customer   Customer @relation(references: [id], fields: [customerId])
+
+  foodVendorId String
+  foodVendor   FoodVendor @relation(references: [id], fields: [foodVendorId])
+
+  deliveryLocationId String
+  deliveryLocation   Location @relation("deliveryLocation", references: [id], fields: [deliveryLocationId])
+}
