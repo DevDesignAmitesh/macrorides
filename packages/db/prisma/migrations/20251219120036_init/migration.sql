@@ -1,7 +1,4 @@
 -- CreateEnum
-CREATE TYPE "roles" AS ENUM ('CUSTOMER', 'VENDOR_OWNER', 'DRIVER');
-
--- CreateEnum
 CREATE TYPE "paymentAttemptStatus" AS ENUM ('CREATED', 'REDIRECTED', 'SUCCESS', 'FAILED');
 
 -- CreateEnum

@@ -12,13 +12,19 @@
  * ============================================================
  */
 
-import z from "zod";
+import z, { ZodError } from "zod";
 import {
   kitchenState,
   vendorType,
   operationalState,
   locationLabel,
 } from "@repo/db/db";
+
+export const zodErrorMessage = ({ error }: { error: ZodError }) => {
+  return error.issues
+    .map((er) => `${er.path.join(".")}: ${er.message}`)
+    .join(", ");
+};
 
 /* ============================================================
    AUTH MODULE
@@ -222,14 +228,16 @@ export const createLocationSchema = z.object({
  * POST /vendors/:vendorId/closed-days
  * TOKEN: ✅ REQUIRED
  */
-export const createClosedDaySchema = z.object({
-  vendorId: z.uuid(), // from URL params
-  closedDays: z.array(
-    z.object({
-      day: z.string(), // e.g. MONDAY
-    })
-  ),
-});
+export const createClosedDaySchema = z.array(
+  z.object({
+    vendorId: z.uuid(), // from URL params
+    closedDays: z.array(
+      z.object({
+        day: z.string(), // e.g. MONDAY
+      })
+    ),
+  })
+);
 
 /**
  * DELETE /vendors/:vendorId/closed-days/:id
@@ -299,14 +307,16 @@ export const createClothingProductSchema = z.object({
  * POST /vendors/:vendorId/:productId/clothing/variants
  * TOKEN: ✅ REQUIRED
  */
-export const createClothingVariantsSchema = z.object({
-  vendorId: z.uuid(), // from URL params
-  productId: z.uuid(), // from URL params
-  size: z.string(),
-  color: z.string(),
-  price: z.number(),
-  stockQty: z.number(),
-});
+export const createClothingVariantsSchema = z.array(
+  z.object({
+    vendorId: z.uuid(), // from URL params
+    productId: z.uuid(), // from URL params
+    size: z.string(),
+    color: z.string(),
+    price: z.number(),
+    stockQty: z.number(),
+  })
+);
 
 /* ============================================================
    CATEGORIES (FOOD & CLOTHING)
@@ -317,10 +327,12 @@ export const createClothingVariantsSchema = z.object({
  * POST /vendors/:vendorId/clothing/categories
  * TOKEN: ✅ REQUIRED
  */
-export const createCategoriesSchema = z.object({
-  vendorId: z.uuid(), // from URL params
-  name: z.string(),
-});
+export const createCategoriesSchema = z.array(
+  z.object({
+    vendorId: z.uuid(), // from URL params
+    name: z.string(),
+  })
+);
 
 /* ============================================================
    COMMON TYPES

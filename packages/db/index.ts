@@ -1,6 +1,5 @@
 import {
   PrismaClient,
-  roles,
   vendorType,
   kitchenState,
   operationalState,
@@ -18,4 +17,4 @@ export const prisma = globalForPrisma.prisma || new PrismaClient({ adapter });
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
-export { roles, vendorType, kitchenState, operationalState, locationLabel };
+export { vendorType, kitchenState, operationalState, locationLabel };
