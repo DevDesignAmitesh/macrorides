@@ -20,6 +20,8 @@ import {
   locationLabel,
 } from "@repo/db/db";
 
+export type roles = "CUSTOMER" | "VENDOR_OWNER" | "DRIVER"
+
 export const zodErrorMessage = ({ error }: { error: ZodError }) => {
   return error.issues
     .map((er) => `${er.path.join(".")}: ${er.message}`)
@@ -383,7 +385,7 @@ export interface AccountMeResponse {
   id: UUID;
   name: string;
   phone: string;
-  roles: Array<"CUSTOMER" | "VENDOR_OWNER" | "DRIVER">;
+  roles: Array<roles>;
 }
 
 /* ============================================================

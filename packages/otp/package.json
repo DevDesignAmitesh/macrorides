@@ -1,0 +1,21 @@
+{
+  "name": "@repo/otp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/db": "workspace:*"
+  },
+  "exports": {
+    "./otp": "./dist/index.js"
+  }
+}

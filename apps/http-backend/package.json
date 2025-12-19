@@ -9,9 +9,10 @@
     "start": "node dist/bin.js"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@repo/db": "workspace:*",
+    "@repo/otp": "workspace:*",
     "@repo/types": "workspace:*",
-    "@repo/db": "workspace:*"
+    "@repo/typescript-config": "workspace:*"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +20,7 @@
   "type": "commonjs",
   "dependencies": {
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3"
   }
