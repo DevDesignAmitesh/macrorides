@@ -139,6 +139,65 @@ export const getVendorSchema = z.object({
   vendorId: z.uuid(), // from URL params
 });
 
+/**
+ * RESPONSE
+
+{
+  message: "Vendor fetched successfully",
+  data: {
+    id: string,
+    outletName: string,
+    type: "FOOD" | "CLOTHING",
+    isVerified: boolean,
+
+    contactNumber: string,
+
+    gstNumber?: string,
+    panNumber: string,
+    aadhaarNumber: string,
+
+    owner: {
+      id: string,
+      accountId: string,
+    },
+
+    locations: [
+      {
+        id: string,
+        latitude: number,
+        longitude: number,
+        address: string,
+        label: "OUTLET" | "PICKUP",
+        contactPhone: string,
+      }
+    ],
+
+    closedDays: [
+      {
+        id: string,
+        day: string, // MONDAY
+      }
+    ],
+
+    foodVendor?: {
+      fssaiNumber: string,
+      kitchenState: "OPEN" | "CLOSED" | "KITCHEN_BUSY",
+      openingTime: string, // ISO
+      closingTime: string, // ISO
+      is247: boolean,
+    },
+
+    clothVendor?: {
+      returnPolicy: string,
+      operationalState: "OPEN" | "CLOSED" | "MAINTAINANCE",
+    },
+
+    createdAt: string,
+    updatedAt: string,
+  }
+}
+ */
+
 /* ============================================================
    VENDOR LOCATION
    ============================================================ */
@@ -262,3 +321,239 @@ export const createCategoriesSchema = z.object({
   vendorId: z.uuid(), // from URL params
   name: z.string(),
 });
+
+/* ============================================================
+   COMMON TYPES
+   ============================================================ */
+
+export type UUID = string;
+export type ISODateString = string;
+
+/* ============================================================
+   AUTH MODULE
+   ============================================================ */
+
+/** POST /auth/register */
+export interface AccountSignupInput {
+  phone: string;
+  name: string;
+  role: "CUSTOMER" | "VENDOR_OWNER";
+}
+
+export interface AuthMessageResponse {
+  message: string;
+}
+
+/** POST /auth/verify-otp */
+export interface AccountOTPVerifyInput {
+  phone: string;
+  otp: string;
+}
+
+export interface OTPVerifySuccessResponse {
+  message: string;
+  data: {
+    token: string;
+  };
+}
+
+/** POST /auth/login */
+export interface AccountSigninInput {
+  phone: string;
+}
+
+/* ============================================================
+   ACCOUNT MODULE
+   ============================================================ */
+
+/** GET /account/me */
+export interface AccountMeResponse {
+  id: UUID;
+  name: string;
+  phone: string;
+  roles: Array<"CUSTOMER" | "VENDOR_OWNER" | "DRIVER">;
+}
+
+/* ============================================================
+   VENDOR MODULE
+   ============================================================ */
+
+/** POST /vendors */
+export interface VendorCreateInput {
+  outletName: string;
+  type: "FOOD" | "CLOTHING";
+  gstNumber?: string;
+  panNumber: string;
+  aadhaarNumber: string;
+  contactNumber: string;
+}
+
+export interface VendorCreateResponse {
+  message: string;
+  data: {
+    vendorId: UUID;
+  };
+}
+
+/** GET /vendors/:vendorId */
+export interface GetVendorParams {
+  vendorId: UUID; // URL param
+}
+
+/* ============================================================
+   VENDOR RESPONSE SHAPE
+   ============================================================ */
+
+export interface VendorLocation {
+  id: UUID;
+  latitude: number;
+  longitude: number;
+  address: string;
+  label: "HOME" | "WORK" | "OUTLET" | "PICKUP" | "DROP";
+  contactPhone: string;
+}
+
+export interface VendorClosedDay {
+  id: UUID;
+  day: string; // MONDAY, SUNDAY, etc.
+}
+
+export interface FoodVendorDetails {
+  fssaiNumber: string;
+  kitchenState: "OPEN" | "CLOSED" | "KITCHEN_BUSY";
+  openingTime: ISODateString;
+  closingTime: ISODateString;
+  is247: boolean;
+}
+
+export interface ClothVendorDetails {
+  returnPolicy: string;
+  operationalState: "OPEN" | "CLOSED" | "MAINTAINANCE";
+}
+
+export interface VendorResponse {
+  message: string;
+  data: {
+    id: UUID;
+    outletName: string;
+    type: "FOOD" | "CLOTHING";
+    isVerified: boolean;
+
+    contactNumber: string;
+
+    gstNumber?: string;
+    panNumber: string;
+    aadhaarNumber: string;
+
+    owner: {
+      id: UUID;
+      accountId: UUID;
+    };
+
+    locations: VendorLocation[];
+    closedDays: VendorClosedDay[];
+
+    foodVendor?: FoodVendorDetails;
+    clothVendor?: ClothVendorDetails;
+
+    createdAt: ISODateString;
+    updatedAt: ISODateString;
+  };
+}
+
+/* ============================================================
+   VENDOR LOCATION
+   ============================================================ */
+
+/** POST /vendors/:vendorId/locations */
+export interface CreateVendorLocationInput {
+  vendorId: UUID; // URL param
+  latitude: number;
+  longitude: number;
+  address: string;
+  label: "HOME" | "WORK" | "OUTLET" | "PICKUP" | "DROP";
+}
+
+/* ============================================================
+   VENDOR CLOSED DAYS
+   ============================================================ */
+
+/** POST /vendors/:vendorId/closed-days */
+export interface CreateClosedDayInput {
+  vendorId: UUID; // URL param
+  closedDays: {
+    day: string;
+  }[];
+}
+
+/** DELETE /vendors/:vendorId/closed-days/:id */
+export interface DeleteClosedDayInput {
+  vendorId: UUID; // URL param
+  closingDayId: UUID; // URL param
+}
+
+/* ============================================================
+   FOOD VENDOR
+   ============================================================ */
+
+/** POST /vendors/:vendorId/food */
+export interface FoodVendorCreateOrUpdateInput {
+  vendorId: UUID; // URL param
+  fssaiNumber: string;
+  kitchenState: "OPEN" | "CLOSED" | "KITCHEN_BUSY";
+  openingTime: ISODateString;
+  closingTime: ISODateString;
+  is247: boolean;
+}
+
+/** POST /vendors/:vendorId/food/items */
+export interface CreateFoodItemInput {
+  vendorId: UUID; // URL param
+  name: string;
+  description: string;
+  imageUrl: string;
+  price: number;
+  isAvailable: boolean;
+}
+
+/* ============================================================
+   CLOTHING VENDOR
+   ============================================================ */
+
+/** POST /vendors/:vendorId/clothing */
+export interface ClothVendorCreateOrUpdateInput {
+  vendorId: UUID; // URL param
+  returnPolicy: string;
+  operationalState: "OPEN" | "CLOSED" | "MAINTAINANCE";
+}
+
+/** POST /vendors/:vendorId/clothing/products */
+export interface CreateClothingProductInput {
+  vendorId: UUID; // URL param
+  name: string;
+  description: string;
+  brand: string;
+}
+
+/** POST /vendors/:vendorId/:productId/clothing/variants */
+export interface CreateClothingVariantInput {
+  vendorId: UUID; // URL param
+  productId: UUID; // URL param
+  size: string;
+  color: string;
+  price: number;
+  stockQty: number;
+}
+
+/* ============================================================
+   CATEGORIES
+   ============================================================ */
+
+/**
+ * POST /vendors/:vendorId/food/categories
+ * POST /vendors/:vendorId/clothing/categories
+ */
+export interface CreateCategoryInput {
+  vendorId: UUID; // URL param
+  name: string;
+}
