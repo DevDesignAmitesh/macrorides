@@ -159,9 +159,9 @@ model Vendor {
   type          vendorType
   isVerified    Boolean    @default(false)
   gstNumber     String?
-  panNumber     String
-  aadhaarNumber String
-  contactNumber String
+  panNumber     String     @unique
+  aadhaarNumber String     @unique
+  contactNumber String     @unique
 
   location   VendorSavedLocation[]
   closedDays ClosedDays[]

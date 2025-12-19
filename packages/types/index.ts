@@ -20,7 +20,7 @@ import {
   locationLabel,
 } from "@repo/db/db";
 
-export type roles = "CUSTOMER" | "VENDOR_OWNER" | "DRIVER"
+export type roles = "CUSTOMER" | "VENDOR_OWNER" | "DRIVER";
 
 export const zodErrorMessage = ({ error }: { error: ZodError }) => {
   return error.issues
@@ -214,13 +214,15 @@ export const getVendorSchema = z.object({
  * POST /vendors/:vendorId/locations
  * TOKEN: ✅ REQUIRED
  */
-export const createLocationSchema = z.object({
-  vendorId: z.uuid(), // from URL params
-  latitude: z.number(),
-  longitude: z.number(),
-  address: z.string(),
-  label: z.enum(locationLabel),
-});
+export const createLocationSchema = z.array(
+  z.object({
+    vendorId: z.uuid(), // from URL params
+    latitude: z.number(),
+    longitude: z.number(),
+    address: z.string(),
+    label: z.enum(locationLabel),
+  })
+);
 
 /* ============================================================
    VENDOR CLOSED DAYS
@@ -230,16 +232,10 @@ export const createLocationSchema = z.object({
  * POST /vendors/:vendorId/closed-days
  * TOKEN: ✅ REQUIRED
  */
-export const createClosedDaySchema = z.array(
-  z.object({
-    vendorId: z.uuid(), // from URL params
-    closedDays: z.array(
-      z.object({
-        day: z.string(), // e.g. MONDAY
-      })
-    ),
-  })
-);
+export const createClosedDaySchema = z.object({
+  vendorId: z.uuid(), // from URL params
+  closedDays: z.array(z.string()),
+});
 
 /**
  * DELETE /vendors/:vendorId/closed-days/:id
@@ -275,7 +271,6 @@ export const createFoodItemSchema = z.object({
   vendorId: z.uuid(), // from URL params
   name: z.string(),
   description: z.string(),
-  imageUrl: z.url(),
   price: z.number(),
   isAvailable: z.boolean(),
 });
@@ -446,33 +441,30 @@ export interface ClothVendorDetails {
 }
 
 export interface VendorResponse {
-  message: string;
-  data: {
+  id: UUID;
+  outletName: string;
+  type: "FOOD" | "CLOTHING";
+  isVerified: boolean;
+
+  contactNumber: string;
+
+  gstNumber?: string | null;
+  panNumber: string;
+  aadhaarNumber: string;
+
+  owner: {
     id: UUID;
-    outletName: string;
-    type: "FOOD" | "CLOTHING";
-    isVerified: boolean;
-
-    contactNumber: string;
-
-    gstNumber?: string;
-    panNumber: string;
-    aadhaarNumber: string;
-
-    owner: {
-      id: UUID;
-      accountId: UUID;
-    };
-
-    locations: VendorLocation[];
-    closedDays: VendorClosedDay[];
-
-    foodVendor?: FoodVendorDetails;
-    clothVendor?: ClothVendorDetails;
-
-    createdAt: ISODateString;
-    updatedAt: ISODateString;
+    accountId: UUID;
   };
+
+  locations: VendorLocation[];
+  closedDays: VendorClosedDay[];
+
+  foodVendor?: FoodVendorDetails | null;
+  clothVendor?: ClothVendorDetails | null;
+
+  createdAt: ISODateString;
+  updatedAt: ISODateString;
 }
 
 /* ============================================================
