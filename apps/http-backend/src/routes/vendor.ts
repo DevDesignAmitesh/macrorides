@@ -19,7 +19,9 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 // doubt between common or only vendor middleware or more than two roles middleware
 vendorRouter.post("/", commonMiddleware, createVendorService);
+
 vendorRouter.get("/:vendorId", commonMiddleware, getVendorService);
+
 vendorRouter.post(
   "/:vendorId/locations",
   commonMiddleware,

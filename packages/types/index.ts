@@ -324,12 +324,10 @@ export const createClothingVariantsSchema = z.array(
  * POST /vendors/:vendorId/clothing/categories
  * TOKEN: ✅ REQUIRED
  */
-export const createCategoriesSchema = z.array(
-  z.object({
-    vendorId: z.uuid(), // from URL params
-    name: z.string(),
-  })
-);
+export const createCategoriesSchema = z.object({
+  vendorId: z.uuid(), // from URL params
+  name: z.array(z.string()),
+});
 
 /* ============================================================
    COMMON TYPES

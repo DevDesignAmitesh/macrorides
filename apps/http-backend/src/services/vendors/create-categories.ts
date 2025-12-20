@@ -17,12 +17,14 @@ export const createCategoriesService = async (req: Request, res: Response) => {
       });
     }
 
+    const { vendorId, name } = data;
+
     await prisma.categories
       .createMany({
-        data: data.map((dt) => {
+        data: name.map((nm) => {
           return {
-            vendorId: dt.vendorId,
-            name: dt.name,
+            vendorId: vendorId,
+            name: nm,
           };
         }),
       })
