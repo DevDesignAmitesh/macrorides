@@ -258,8 +258,8 @@ export const foodVendorCreateOrUpdateSchema = z.object({
   vendorId: z.uuid(), // from URL params
   fssaiNumber: z.string(),
   kitchenState: z.enum(kitchenState),
-  openingTime: z.string().datetime(), // ISO string
-  closingTime: z.string().datetime(), // ISO string
+  openingTime: z.iso.datetime(), // ISO string
+  closingTime: z.iso.datetime(), // ISO string
   is247: z.boolean(),
 });
 
