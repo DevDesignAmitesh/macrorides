@@ -138,7 +138,7 @@ importers:
         version: 7.2.0
       '@prisma/client':
         specifier: ^7.2.0
-        version: 7.2.0(prisma@7.2.0(@types/react@19.2.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.2))(typescript@5.9.2)
+        version: 7.2.0(prisma@7.2.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.2))(typescript@5.9.2)
     devDependencies:
       '@repo/typescript-config':
         specifier: workspace:*
@@ -151,7 +151,7 @@ importers:
         version: 17.2.3
       prisma:
         specifier: ^7.2.0
-        version: 7.2.0(@types/react@19.2.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.2)
+        version: 7.2.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.2)
 
   packages/eslint-config:
     devDependencies:
@@ -189,6 +189,25 @@ importers:
         specifier: ^8.49.0
         version: 8.50.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.2)
 
+  packages/hooks:
+    dependencies:
+      axios:
+        specifier: ^1.13.2
+        version: 1.13.2
+      react:
+        specifier: ^19.2.3
+        version: 19.2.3
+    devDependencies:
+      '@repo/types':
+        specifier: workspace:*
+        version: link:../types
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/react':
+        specifier: ^19.2.7
+        version: 19.2.7
+
   packages/otp:
     devDependencies:
       '@repo/db':
@@ -203,6 +222,9 @@ importers:
 
   packages/types:
     dependencies:
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
       typescript:
         specifier: ^5
         version: 5.9.2
@@ -1185,6 +1207,9 @@ packages:
 
   '@types/react@19.2.2':
     resolution: {integrity: sha512-6mDvHUFSjyT2B2yeNx2nUgMxh9LtOWvkhIU3uePn2I2oyNymUAX1NIsdgviM4CH+JSrp2D2hsMvJOkxY+0wNRA==}
+
+  '@types/react@19.2.7':
+    resolution: {integrity: sha512-MWtvHrGZLFttgeEj28VXHxpmwYbor/ATPYbBfSFZEIRK0ecCFLl2Qo55z52Hss+UV9CRN7trSeq1zbgx7YDWWg==}
 
   '@types/send@1.2.1':
     resolution: {integrity: sha512-arsCikDvlU99zl1g69TcAB3mzZPpxgw0UQnaHeC1Nwb015xp8bknZv5rIfri9xTOcMuaVgvabfIRA7PSZVuZIQ==}
@@ -3723,11 +3748,11 @@ snapshots:
 
   '@prisma/client-runtime-utils@7.2.0': {}
 
-  '@prisma/client@7.2.0(prisma@7.2.0(@types/react@19.2.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.2))(typescript@5.9.2)':
+  '@prisma/client@7.2.0(prisma@7.2.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.2))(typescript@5.9.2)':
     dependencies:
       '@prisma/client-runtime-utils': 7.2.0
     optionalDependencies:
-      prisma: 7.2.0(@types/react@19.2.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.2)
+      prisma: 7.2.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.2)
       typescript: 5.9.2
 
   '@prisma/config@7.2.0':
@@ -3794,9 +3819,9 @@ snapshots:
 
   '@prisma/query-plan-executor@6.18.0': {}
 
-  '@prisma/studio-core@0.9.0(@types/react@19.2.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+  '@prisma/studio-core@0.9.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
-      '@types/react': 19.2.2
+      '@types/react': 19.2.7
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
 
@@ -4206,6 +4231,10 @@ snapshots:
       '@types/react': 19.2.2
 
   '@types/react@19.2.2':
+    dependencies:
+      csstype: 3.2.3
+
+  '@types/react@19.2.7':
     dependencies:
       csstype: 3.2.3
 
@@ -5934,12 +5963,12 @@ snapshots:
 
   prettier@3.7.4: {}
 
-  prisma@7.2.0(@types/react@19.2.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.2):
+  prisma@7.2.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.2):
     dependencies:
       '@prisma/config': 7.2.0
       '@prisma/dev': 0.17.0(typescript@5.9.2)
       '@prisma/engines': 7.2.0
-      '@prisma/studio-core': 0.9.0(@types/react@19.2.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@prisma/studio-core': 0.9.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       mysql2: 3.15.3
       postgres: 3.4.7
     optionalDependencies:

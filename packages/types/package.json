@@ -7,14 +7,15 @@
     "build": "tsc -b"
   },
   "devDependencies": {
-    "@types/bun": "latest",
+    "@repo/db": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@repo/db": "workspace:*"
+    "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
+    "dotenv": "^17.2.3",
     "zod": "^4.2.1"
   },
   "exports": {

@@ -12,6 +12,7 @@
  * ============================================================
  */
 
+import "dotenv/config";
 import z, { ZodError } from "zod";
 import {
   kitchenState,
@@ -19,6 +20,20 @@ import {
   operationalState,
   locationLabel,
 } from "@repo/db/db";
+
+if (!process.env.NODE_ENV) {
+  throw new Error("NODE_ENV not found");
+}
+
+export type Notify = {
+  success: (msg: string) => void;
+  error: (msg: string) => void;
+};
+
+export const HTTP_URL =
+  process.env.NODE_ENV === "production"
+    ? "http://wrong:4000/api/v1"
+    : "http://localhost:4000/api/v1";
 
 export type roles = "CUSTOMER" | "VENDOR_OWNER" | "DRIVER";
 
