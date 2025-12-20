@@ -12,18 +12,17 @@
  * ============================================================
  */
 
-import "dotenv/config";
 import z, { ZodError } from "zod";
-import {
-  kitchenState,
-  vendorType,
-  operationalState,
-  locationLabel,
-} from "@repo/db/db";
+import "dotenv/config"
 
 if (!process.env.NODE_ENV) {
   throw new Error("NODE_ENV not found");
 }
+
+export type kitchenState = "OPEN" | "CLOSED" | "KITCHEN_BUSY";
+export type vendorType = "FOOD" | "CLOTHING";
+export type operationalState = "OPEN" | "CLOSED" | "MAINTAINANCE";
+export type locationLabel = "HOME" | "WORK" | "OUTLET" | "PICKUP" | "DROP";
 
 export type Notify = {
   success: (msg: string) => void;
@@ -137,7 +136,7 @@ export const accountSigninSchema = z.object({
  */
 export const vendorCreateSchema = z.object({
   outletName: z.string(),
-  type: z.enum(vendorType), // FOOD | CLOTHING
+  type: z.enum(["FOOD", "CLOTHING"]), // FOOD | CLOTHING
   gstNumber: z.string().optional(),
   panNumber: z.string(),
   aadhaarNumber: z.string(),
@@ -235,7 +234,7 @@ export const createLocationSchema = z.array(
     latitude: z.number(),
     longitude: z.number(),
     address: z.string(),
-    label: z.enum(locationLabel),
+    label: z.enum(["HOME", "WORK", "OUTLET", "PICKUP", "DROP"]),
   })
 );
 
@@ -272,7 +271,7 @@ export const deleteClosedDaySchema = z.object({
 export const foodVendorCreateOrUpdateSchema = z.object({
   vendorId: z.uuid(), // from URL params
   fssaiNumber: z.string(),
-  kitchenState: z.enum(kitchenState),
+  kitchenState: z.enum(["OPEN", "CLOSED", "KITCHEN_BUSY"]),
   openingTime: z.iso.datetime(), // ISO string
   closingTime: z.iso.datetime(), // ISO string
   is247: z.boolean(),
@@ -301,7 +300,7 @@ export const createFoodItemSchema = z.object({
 export const clothVendorCreateOrUpdateSchema = z.object({
   vendorId: z.uuid(), // from URL params
   returnPolicy: z.string(),
-  operationalState: z.enum(operationalState),
+  operationalState: z.enum(["OPEN", "CLOSED", "MAINTAINANCE"]),
 });
 
 /**

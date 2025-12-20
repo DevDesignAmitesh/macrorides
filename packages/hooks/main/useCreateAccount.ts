@@ -33,13 +33,13 @@ export const useCreateAccount = ({ notify }: { notify: Notify }) => {
         },
       });
 
-      if (res.status !== 201) {
-        notify.error(res?.data?.message ?? "Internal Server Error");
-        return;
+      if (res.status === 201 || res.status === 200) {
+        notify.success(res?.data?.message ?? `OTP sent on ${input.phone}`);
+        handleSuccess();
       }
 
-      notify.success(res?.data?.message ?? `OTP sent on ${input.phone}`);
-      handleSuccess();
+      notify.error(res?.data?.message ?? "Internal Server Error");
+      return;
     } catch (e: any) {
       console.log("error in useCreateAccount ", e);
       notify.error(e?.response?.data?.message ?? "Internal Server Error");

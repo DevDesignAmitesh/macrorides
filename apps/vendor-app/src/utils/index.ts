@@ -1,3 +1,4 @@
+import { Notify } from "@repo/types/types";
 import {
   Store,
   BarChart3,
@@ -6,6 +7,7 @@ import {
   CreditCard,
   UserCheck,
 } from "lucide-react";
+import { toast } from "sonner";
 
 export const features = [
   {
@@ -39,3 +41,12 @@ export const features = [
     description: "Quick and easy account setup process",
   },
 ];
+
+export const notify: Notify = {
+  error: (msg) => {
+    toast.error(msg);
+  },
+  success: (msg) => {
+    toast.success(msg);
+  },
+};

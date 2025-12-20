@@ -7,7 +7,6 @@
     "build": "tsc -b"
   },
   "devDependencies": {
-    "@repo/db": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/bun": "latest"
   },

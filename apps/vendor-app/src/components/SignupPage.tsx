@@ -1,13 +1,37 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Logo } from "./Logo";
+import { useCreateAccount } from "@repo/hooks/hooks";
+import { AccountSignupInput } from "@repo/types/types";
+import { useRouter } from "next/navigation";
+import { notify } from "@/utils";
 
 const SignupPage: React.FC = () => {
+  const [formData, setFromData] = useState<AccountSignupInput>({
+    name: "",
+    phone: "",
+    role: "VENDOR_OWNER",
+  });
+
+  const router = useRouter();
+
+  const handleChange = (index: keyof AccountSignupInput, value: string) => {
+    setFromData((prev) => ({
+      ...prev,
+      [index]: value,
+    }));
+  };
+
+  const handleSuccess = () => {
+    router.push(`/otp-verify?phone=${formData.phone}`);
+  };
+
+  const { handleCreateAccount, loading } = useCreateAccount({ notify });
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8">
       <div className="max-w-md w-full mx-4">
@@ -25,26 +49,46 @@ const SignupPage: React.FC = () => {
             </p>
           </div>
 
-          <form onSubmit={() => {}} className="space-y-6">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+
+              handleCreateAccount({ handleSuccess, input: formData });
+            }}
+            className="space-y-6"
+          >
             <div className="flex flex-col justify-center items-start gap-2">
               <Label>Owner Name</Label>
-              <Input required />
+              <Input
+                value={formData.name}
+                onChange={(e) => handleChange("name", e.target.value)}
+                required
+              />
             </div>
             <div className="flex flex-col justify-center items-start gap-2">
               <Label>Owner Phone Number</Label>
-              <Input maxLength={10} required />
+              <Input
+                value={formData.phone}
+                onChange={(e) => handleChange("phone", e.target.value)}
+                maxLength={10}
+                required
+              />
             </div>
 
             <Button
+              disabled={loading}
               type="submit"
               className="w-full bg-green-600 text-white cursor-pointer"
             >
-              Sign up
+              {loading ? "Processing..." : "Sign up"}
             </Button>
 
             <div className="text-center">
               <span className="text-gray-600">Already have an account? </span>
-              <Link href="/login" className="text-[#2C9C46] hover:underline">
+              <Link
+                href={loading ? "" : "/login"}
+                className="text-[#2C9C46] hover:underline"
+              >
                 Login here
               </Link>
             </div>

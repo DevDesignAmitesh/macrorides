@@ -4,7 +4,7 @@ import {
   kitchenState,
   operationalState,
   locationLabel,
-} from "./generated/prisma/client";
+} from "./generated/prisma/client.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 const adapter = new PrismaPg({

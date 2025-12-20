@@ -2,11 +2,22 @@ import express, { Express } from "express";
 import { authRouter } from "./routes/auth";
 import { accountRouter } from "./routes/account";
 import { vendorRouter } from "./routes/vendor";
+import cors from "cors";
 
 export const app: Express = express();
 export const PORT = 4000;
 
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+    optionsSuccessStatus: 200,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept", "Origin"],
+  })
+);
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/account", accountRouter);
