@@ -1,16 +1,12 @@
 import { Request, Response } from "express";
 import { responsePlate } from "../../utils";
-import {
-  createClothingProductSchema,
-  zodErrorMessage,
-} from "@repo/types/types";
+import { createCategoriesSchema, zodErrorMessage } from "@repo/types/types";
 import { prisma } from "@repo/db/db";
 
-export const createClothItemService = async (req: Request, res: Response) => {
+export const createCategoriesService = async (req: Request, res: Response) => {
   try {
-    const { success, error, data } = createClothingProductSchema.safeParse({
+    const { success, error, data } = createCategoriesSchema.safeParse({
       ...req.body,
-      vendorId: req.params.vendorId,
     });
 
     if (!success) {
@@ -21,27 +17,25 @@ export const createClothItemService = async (req: Request, res: Response) => {
       });
     }
 
-    const { brand, description, name, vendorId } = data;
-
-    await prisma.clothingProduct
-      .create({
-        data: {
-          brand,
-          description,
-          name,
-          clothVendorId: vendorId,
-        },
+    await prisma.categories
+      .createMany({
+        data: data.map((dt) => {
+          return {
+            vendorId: dt.vendorId,
+            name: dt.name,
+          };
+        }),
       })
       .then(() => {
         return responsePlate({
           res,
-          message: "clothing product created successfully",
+          message: "categroies created successfully",
           status: 201,
         });
       })
       .catch((err) => {
         console.log(
-          "error while creating clothing product in createFoodItemService ",
+          "error while creating categories in createCategoriesService ",
           err
         );
         return responsePlate({
@@ -51,7 +45,7 @@ export const createClothItemService = async (req: Request, res: Response) => {
         });
       });
   } catch (e) {
-    console.log("error in createClothItemService ", e);
+    console.log("error in createCategoriesService ", e);
     return responsePlate({
       res,
       message: "internal server error",

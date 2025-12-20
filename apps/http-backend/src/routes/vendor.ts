@@ -8,6 +8,10 @@ import { createClosedDaysService } from "../services/vendors/create-closed-days"
 import { deleteClosedDayService } from "../services/vendors/delete-closed-day";
 import { createFoodItemService } from "../services/vendors/create-food-item";
 import { createClothItemService } from "../services/vendors/create-cloth-item";
+import { createClothVariantSchema } from "../services/vendors/create-cloth-variant";
+import { createCategoriesService } from "../services/vendors/create-categories";
+import { createFoodVendorService } from "../services/vendors/create-food-vendor";
+import { createClothingVendorService } from "../services/vendors/create-clothing-vendor";
 
 export const vendorRouter: Router = Router();
 
@@ -48,15 +52,26 @@ vendorRouter.post(
   createClothItemService
 );
 
+// this will create clothing variants
+vendorRouter.post(
+  "/:vendorId/:productId/clothing/variants",
+  commonMiddleware,
+  createClothVariantSchema
+);
+
 // this will create food vendor
-vendorRouter.post("/:vendorId/food");
+vendorRouter.post("/:vendorId/food", commonMiddleware, createFoodVendorService);
 
 // this will create clothing vendor
-vendorRouter.post("/:vendorId/clothing");
+vendorRouter.post(
+  "/:vendorId/clothing",
+  commonMiddleware,
+  createClothingVendorService
+);
 
-// this will create clothing variants
-vendorRouter.post("/:vendorId/:productId/clothing/variants");
-
-// these both will create categories
-vendorRouter.post("/:vendorId/food/categories");
-vendorRouter.post("/:vendorId/clothing/categories");
+// this will create categories for both food or clothing
+vendorRouter.post(
+  "/:vendorId/categories",
+  commonMiddleware,
+  createCategoriesService
+);

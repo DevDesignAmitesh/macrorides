@@ -30,17 +30,36 @@ export const createFoodItemService = async (req: Request, res: Response) => {
 
     let imageUrl = await uploadToImageKit(req?.file, "food-images-" + vendorId);
 
-    await prisma.foodItem.create({
-      data: {
-        description,
-        isAvailable,
-        foodVendorId: vendorId,
-        name,
-        price,
-        imageUrl:
-          typeof imageUrl === "string" ? imageUrl : (imageUrl[0] as string),
-      },
-    });
+    await prisma.foodItem
+      .create({
+        data: {
+          description,
+          isAvailable,
+          foodVendorId: vendorId,
+          name,
+          price,
+          imageUrl:
+            typeof imageUrl === "string" ? imageUrl : (imageUrl[0] as string),
+        },
+      })
+      .then(() => {
+        return responsePlate({
+          res,
+          message: "food item created successfully",
+          status: 201,
+        });
+      })
+      .catch((err) => {
+        console.log(
+          "error while creating food item in createFoodItemService ",
+          err
+        );
+        return responsePlate({
+          res,
+          message: "internal server error",
+          status: 503,
+        });
+      });
   } catch (e) {
     console.log("error in createFoodItemService ", e);
     return responsePlate({

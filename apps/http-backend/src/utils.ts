@@ -4,6 +4,7 @@ import { roles } from "@repo/types/types";
 import { Response } from "express";
 import { sign, verify } from "jsonwebtoken";
 import ImageKit from "imagekit";
+import crypto from "crypto";
 
 export const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -144,3 +145,21 @@ export const uploadToImageKit = (
     files.map((file) => (file ? uploadSingleFile(file) : Promise.resolve("")))
   );
 };
+
+
+export function generateSKU(dt: {
+  vendorId: string;
+  productId: string;
+  size: string;
+  color: string;
+}) {
+  const base = `${dt.vendorId}-${dt.productId}-${dt.size}-${dt.color}`;
+  const hash = crypto
+    .createHash("sha1")
+    .update(base)
+    .digest("hex")
+    .slice(0, 6);
+
+  return `CL-${dt.size}-${dt.color}-${hash}`.toUpperCase();
+}
+

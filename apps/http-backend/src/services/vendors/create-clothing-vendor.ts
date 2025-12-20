@@ -1,16 +1,19 @@
 import { Request, Response } from "express";
 import { responsePlate } from "../../utils";
 import {
-  createClothingProductSchema,
+  clothVendorCreateOrUpdateSchema,
   zodErrorMessage,
 } from "@repo/types/types";
 import { prisma } from "@repo/db/db";
 
-export const createClothItemService = async (req: Request, res: Response) => {
+export const createClothingVendorService = async (
+  req: Request,
+  res: Response
+) => {
   try {
-    const { success, error, data } = createClothingProductSchema.safeParse({
+    const { success, error, data } = clothVendorCreateOrUpdateSchema.safeParse({
       ...req.body,
-      vendorId: req.params.vendorId,
+      ...req.params,
     });
 
     if (!success) {
@@ -21,27 +24,26 @@ export const createClothItemService = async (req: Request, res: Response) => {
       });
     }
 
-    const { brand, description, name, vendorId } = data;
+    const { operationalState, returnPolicy, vendorId } = data;
 
-    await prisma.clothingProduct
+    await prisma.clothVendor
       .create({
         data: {
-          brand,
-          description,
-          name,
-          clothVendorId: vendorId,
+          operationalState,
+          returnPolicy,
+          vendorId,
         },
       })
       .then(() => {
         return responsePlate({
           res,
-          message: "clothing product created successfully",
+          message: "cloth vendor created",
           status: 201,
         });
       })
       .catch((err) => {
         console.log(
-          "error while creating clothing product in createFoodItemService ",
+          "error while creating cloth vendor in createFoodVendorService ",
           err
         );
         return responsePlate({
@@ -51,7 +53,7 @@ export const createClothItemService = async (req: Request, res: Response) => {
         });
       });
   } catch (e) {
-    console.log("error in createClothItemService ", e);
+    console.log("error in createClothingVendorService ", e);
     return responsePlate({
       res,
       message: "internal server error",
