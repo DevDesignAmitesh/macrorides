@@ -67,7 +67,7 @@ export default function Navbar() {
                     hover: { width: "100%", opacity: 1 },
                   }}
                   transition={{ duration: 0.3, ease: "easeOut" }}
-                  className="absolute left-0 -bottom-1 h-[2px] rounded-full bg-black/70"
+                  className="absolute left-0 -bottom-1 h-2px rounded-full bg-black/70"
                 />
               </motion.div>
             ))}
