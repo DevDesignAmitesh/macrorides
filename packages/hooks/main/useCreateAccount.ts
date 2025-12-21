@@ -26,6 +26,7 @@ export const useCreateAccount = ({ notify }: { notify: Notify }) => {
     }
 
     try {
+      console.log("this is running")
       setLoading(true);
       const res = await axios.post(`${HTTP_URL}/auth/register`, data, {
         headers: {
@@ -33,9 +34,12 @@ export const useCreateAccount = ({ notify }: { notify: Notify }) => {
         },
       });
 
+      console.log("this is the response from useCreateAccount ", res);
+
       if (res.status === 201 || res.status === 200) {
         notify.success(res?.data?.message ?? `OTP sent on ${input.phone}`);
         handleSuccess();
+        return
       }
 
       notify.error(res?.data?.message ?? "Internal Server Error");

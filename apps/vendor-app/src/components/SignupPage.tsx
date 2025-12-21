@@ -28,7 +28,7 @@ const SignupPage: React.FC = () => {
   };
 
   const handleSuccess = () => {
-    router.push(`/otp-verify?phone=${formData.phone}`);
+    router.push(`/verify-otp?phone=${formData.phone}`);
   };
 
   const { handleCreateAccount, loading } = useCreateAccount({ notify });
@@ -52,7 +52,6 @@ const SignupPage: React.FC = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-
               handleCreateAccount({ handleSuccess, input: formData });
             }}
             className="space-y-6"

@@ -42,7 +42,7 @@ export function StepIndicator({
           >
             <div
               className={cn(
-                "wizard-step-indicator flex-shrink-0 mt-0.5",
+                "wizard-step-indicator shrink-0 mt-0.5",
                 isCompleted && "wizard-step-completed",
                 isCurrent && "wizard-step-current",
                 !isCompleted && !isCurrent && "wizard-step-upcoming"

@@ -29,21 +29,6 @@ export const responsePlate = ({
   });
 };
 
-export async function sendOtpOrFail(phone: string, res: Response) {
-  const otpResponse = await otpStore.generateOtpForPhone(phone);
-
-  if (!otpResponse.success) {
-    responsePlate({
-      res,
-      message: otpResponse.message ?? `failed to send OTP on ${phone}`,
-      status: 400,
-    });
-    return false;
-  }
-
-  return true;
-}
-
 export async function verifyOtpOrFail(otp: string, res: Response) {
   const otpResponse = await otpStore.verifyAndDeletePhoneOtp(otp);
 
@@ -146,7 +131,6 @@ export const uploadToImageKit = (
   );
 };
 
-
 export function generateSKU(dt: {
   vendorId: string;
   productId: string;
@@ -154,12 +138,7 @@ export function generateSKU(dt: {
   color: string;
 }) {
   const base = `${dt.vendorId}-${dt.productId}-${dt.size}-${dt.color}`;
-  const hash = crypto
-    .createHash("sha1")
-    .update(base)
-    .digest("hex")
-    .slice(0, 6);
+  const hash = crypto.createHash("sha1").update(base).digest("hex").slice(0, 6);
 
   return `CL-${dt.size}-${dt.color}-${hash}`.toUpperCase();
 }
-

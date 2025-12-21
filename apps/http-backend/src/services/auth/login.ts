@@ -1,14 +1,13 @@
 import { accountSigninSchema, zodErrorMessage } from "@repo/types/types";
-import {
-  responsePlate,
-  sendOtpOrFail,
-} from "../../utils";
+import { responsePlate } from "../../utils";
 import { Request, Response } from "express";
 import { prisma } from "@repo/db/db";
+import { otpStore } from "@repo/otp/otp";
 
 export const loginService = async (req: Request, res: Response) => {
   try {
     const { success, data, error } = accountSigninSchema.safeParse(req.body);
+
     if (!success) {
       return responsePlate({
         res,
@@ -29,16 +28,24 @@ export const loginService = async (req: Request, res: Response) => {
       });
     }
 
-    const ok = await sendOtpOrFail(phone, res);
-    if (!ok) return;
+    const otpResponse = await otpStore.generateOtpForPhone(phone);
+    if (!otpResponse.success) {
+      return responsePlate({
+        res,
+        message:
+          otpResponse.message ?? `Unable to send OTP on ${existingUser.phone}`,
+        status: 400,
+      });
+    }
 
+    console.log(otpResponse);
     return responsePlate({
       res,
-      message: `OTP sent to ${phone}`,
-      status: 201,
+      message: otpResponse.message ?? `OTP sent to ${existingUser.phone}`,
+      status: 200,
     });
   } catch (err) {
-    console.error("registerService error", err);
+    console.error("loginService error", err);
     return responsePlate({
       res,
       message: "internal server error",

@@ -52,12 +52,12 @@ class OtpStore {
 
   public async verifyAndDeletePhoneOtp(
     otp: string
-  ): Promise<{ success: boolean; message?: string }> {
-    if (!this.token || !this.verificationId) {
-      return { success: false };
-    }
-
+  ): Promise<{ success: boolean; message: string }> {
     console.log(this.token, this.verificationId);
+
+    if (!this.token || !this.verificationId) {
+      return { success: false, message: "Invalid OTP" };
+    }
 
     const res = await fetch(
       `https://cpaas.messagecentral.com/verification/v3/validateOtp?&verificationId=${this.verificationId}&code=${otp}`,
@@ -99,12 +99,15 @@ class OtpStore {
     if (data.message === "VERIFICATION_EXPIRED") {
       return {
         success: false,
-        message: "OTP Expired please resend the otp",
+        message: "OTP Expired please request new otp",
       };
     }
 
     if (data.responseCode !== 200) {
-      return { success: false };
+      return {
+        success: false,
+        message: "Invalid OTP",
+      };
     }
 
     try {
@@ -117,7 +120,10 @@ class OtpStore {
         },
       });
 
-      return { success: true };
+      return {
+        success: true,
+        message: "OTP verified successfully",
+      };
     } catch (e) {
       console.log("error is verifyAndDeletePhoneOtp ", e);
       return { success: false, message: "internal server error" };
@@ -126,12 +132,12 @@ class OtpStore {
 
   public async generateOtpForPhone(
     input: string
-  ): Promise<{ success: boolean; message?: string }> {
+  ): Promise<{ success: boolean; message: string }> {
     try {
       const data = await this.generateToken();
 
       if (!data.token) {
-        return { success: false };
+        return { success: false, message: `unable to send OTP on ${input}` };
       }
 
       console.log("this is the token generate data", data);
@@ -169,20 +175,20 @@ class OtpStore {
 
       if (data2.message === "REQUEST_ALREADY_EXISTS") {
         return {
-          success: false,
+          success: true,
           message: "OTP has been already sent",
         };
       }
 
       if (data2.responseCode !== 200) {
-        return { success: false };
+        return { success: false, message: `unable to send OTP on ${input}` };
       }
 
       this.verificationId = data2.data.verificationId;
-      return { success: true };
+      return { success: true, message: `OTP sent on ${input}` };
     } catch (error) {
       console.log("error in generateOtpForPhone ", error);
-      return { success: false };
+      return { success: false, message: "Internal server error" };
     }
   }
 }
