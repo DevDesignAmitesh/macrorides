@@ -23,22 +23,57 @@ import {
 } from "@repo/hooks/hooks";
 import { notify } from "@/utils";
 import { StepEmailConfirmation } from "./steps/StepEmailConfirmation";
+import { StepCommissionPlan } from "./steps/StepCommissionPlan";
+import { toast } from "sonner";
 
 const STEPS = [
-  { id: 1, title: "Vendor Details", description: "Basic information" },
-  { id: 2, title: "Business Details", description: "Operations info" },
-  { id: 3, title: "Location", description: "Outlet address" },
-  { id: 4, title: "Availability", description: "Weekly schedule" },
-  { id: 5, title: "Categories", description: "Products or cuisines" },
+  {
+    id: 1,
+    title: "Vendor Details",
+    description: "Basic information",
+  },
+  {
+    id: 2,
+    title: "Business Details",
+    description: "Operations info",
+  },
+  {
+    id: 3,
+    title: "Location",
+    description: "Outlet address",
+  },
+  {
+    id: 4,
+    title: "Availability",
+    description: "Weekly schedule",
+  },
+  {
+    id: 5,
+    title: "Categories",
+    description: "Products or cuisines",
+  },
   {
     id: 6,
+    title: "Commission Plan",
+    description: "Understand our platform charges",
+  },
+  {
+    id: 7,
     title: "Email Confirmation",
     description: "Confirm your email for updates",
   },
-  { id: 7, title: "Complete", description: "Finish onboarding" },
+  {
+    id: 8,
+    title: "Complete",
+    description: "Finish onboarding",
+  },
 ];
 
 export function VendorOnboarding() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
   const {
     data,
     updateData,
@@ -118,7 +153,12 @@ export function VendorOnboarding() {
   const handleSuccess = () => {
     setErrors({});
     setSlideDirection("right");
-    setCurrentStep(Math.min(currentStep + 1, 7));
+    setCurrentStep(Math.min(currentStep + 1, 8));
+  };
+
+  const handleGoToDashboard = () => {
+    toast.info("You can access dashboard after getting verified");
+    return;
   };
 
   const handleNext = () => {
@@ -189,6 +229,9 @@ export function VendorOnboarding() {
       });
       return;
     } else if (currentStep === 6) {
+      handleSuccess();
+      return;
+    } else if (currentStep === 7) {
       handleSendEmail({
         handleSuccess,
         input: {
@@ -197,6 +240,8 @@ export function VendorOnboarding() {
         },
       });
       return;
+    } else if (currentStep === 8) {
+      handleGoToDashboard();
     }
   };
 
@@ -214,12 +259,7 @@ export function VendorOnboarding() {
     }
   };
 
-  const handleGoToDashboard = () => {
-    resetData();
-    // In real app, would navigate to dashboard
-  };
-
-  const isComplete = currentStep === 7;
+  const isComplete = currentStep === 8;
 
   const isLoading = l1 || l2 || l3 || l4 || l5 || l6;
 
@@ -337,13 +377,19 @@ export function VendorOnboarding() {
                 )}
 
                 {currentStep === 6 && (
+                  <StepCommissionPlan
+                    vendorType={data.vendorBasics.vendorType}
+                  />
+                )}
+
+                {currentStep === 7 && (
                   <StepEmailConfirmation
                     email={data.email}
                     onEmailChange={(email) => updateData("email", email)}
                   />
                 )}
 
-                {currentStep === 7 && (
+                {currentStep === 8 && (
                   <StepSuccess
                     outletName={data.vendorBasics.outletName || "Your Outlet"}
                     onGoToDashboard={handleGoToDashboard}
@@ -374,7 +420,7 @@ export function VendorOnboarding() {
                   >
                     {isLoading
                       ? "Processing..."
-                      : currentStep === 6
+                      : currentStep === 7
                         ? "Confirm & Finish"
                         : "Next"}
                     <ArrowRight className="w-4 h-4" />

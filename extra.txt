@@ -1,1 +1,13 @@
-just thinking should we link food or clothing vendor sperartely or just vendor while the onboarding and on the rest of the placess too
+for deploying backend on the vercel
+  - pnpm i
+  - migrate db
+  - generate db
+  - build all packages (one by one)
+  - building the http-backend
+  - running the http-backend start command
+
+for deploying frontend on the vercel
+  - pnpm i
+  - build all packages (one by one)
+  - building vendor-app
+  - running the vendor-app start command

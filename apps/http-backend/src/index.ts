@@ -24,3 +24,5 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/account", accountRouter);
 app.use("/api/v1/vendors", vendorRouter);
 app.use("/api/v1/maps", mapRouter);
+
+export default app;

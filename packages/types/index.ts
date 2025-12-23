@@ -182,7 +182,12 @@ export const vendorCreateSchema = z.object({
   gstNumber: z.string().optional(),
   panNumber: z.string(),
   aadhaarNumber: z.string(),
-  contactNumber: z.string(),
+  contactNumber: z
+    .string()
+    .regex(
+      /^[6-9]\d{9}$/,
+      "Contact number must be a valid 10-digit Indian number"
+    ),
 });
 
 /**
