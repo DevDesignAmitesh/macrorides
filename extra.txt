@@ -2,7 +2,7 @@ for deploying backend on the vercel
   - pnpm i
   - migrate db
   - generate db
-  - build all packages (one by one)
+  - build all packages (one by one) => types => db => rest of the all
   - building the http-backend
   - running the http-backend start command
 
