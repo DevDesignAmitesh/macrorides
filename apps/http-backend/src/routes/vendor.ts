@@ -12,6 +12,7 @@ import { createClothVariantSchema } from "../services/vendors/create-cloth-varia
 import { createCategoriesService } from "../services/vendors/create-categories";
 import { createFoodVendorService } from "../services/vendors/create-food-vendor";
 import { createClothingVendorService } from "../services/vendors/create-clothing-vendor";
+import { sendEmailService } from "../services/vendors/send-email";
 
 export const vendorRouter: Router = Router();
 
@@ -20,11 +21,14 @@ const upload = multer({ storage: multer.memoryStorage() });
 // doubt between common or only vendor middleware or more than two roles middleware
 vendorRouter.post("/", commonMiddleware, createVendorService);
 
+vendorRouter.post("/email/:type", commonMiddleware, sendEmailService);
+
 vendorRouter.get("/:vendorId", commonMiddleware, getVendorService);
 
+// this can be a common route for each role like ( users, drivers, admin and vendor )
 vendorRouter.post(
   "/:vendorId/locations",
-  commonMiddleware,
+  // commonMiddleware,
   createLocationService
 );
 vendorRouter.post(

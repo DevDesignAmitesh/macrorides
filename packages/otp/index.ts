@@ -176,7 +176,7 @@ class OtpStore {
       if (data2.message === "REQUEST_ALREADY_EXISTS") {
         return {
           success: true,
-          message: "OTP has been already sent",
+          message: "kindly use the last received OTP",
         };
       }
 

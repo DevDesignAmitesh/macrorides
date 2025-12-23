@@ -3,11 +3,7 @@ import {
   roles,
   zodErrorMessage,
 } from "@repo/types/types";
-import {
-  generateToken,
-  responsePlate,
-  verifyOtpOrFail,
-} from "../../utils";
+import { generateToken, responsePlate, verifyOtpOrFail } from "../../utils";
 import { Request, Response } from "express";
 import { prisma } from "@repo/db/db";
 
@@ -39,7 +35,7 @@ export const verifyOTPService = async (req: Request, res: Response) => {
     if (!existingUser) {
       return responsePlate({
         res,
-        message: `user not exists with phone ${phone}`,
+        message: `user not found please register`,
         status: 400,
       });
     }
@@ -53,7 +49,17 @@ export const verifyOTPService = async (req: Request, res: Response) => {
         ? "VENDOR_OWNER"
         : "DRIVER";
 
-    const token = generateToken({ userId: existingUser.id, role: role });
+    const userId =
+      role === "VENDOR_OWNER"
+        ? existingUser?.vendorOwner?.id
+        : role === "CUSTOMER"
+          ? existingUser?.customer?.id
+          : existingUser?.driver?.id;
+
+    const token = generateToken({
+      userId: userId!,
+      role: role,
+    });
 
     return responsePlate({
       res,

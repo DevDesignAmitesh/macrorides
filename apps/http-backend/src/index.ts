@@ -3,6 +3,7 @@ import { authRouter } from "./routes/auth";
 import { accountRouter } from "./routes/account";
 import { vendorRouter } from "./routes/vendor";
 import cors from "cors";
+import { mapRouter } from "./routes/map";
 
 export const app: Express = express();
 export const PORT = 4000;
@@ -22,3 +23,4 @@ app.use(
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/account", accountRouter);
 app.use("/api/v1/vendors", vendorRouter);
+app.use("/api/v1/maps", mapRouter);

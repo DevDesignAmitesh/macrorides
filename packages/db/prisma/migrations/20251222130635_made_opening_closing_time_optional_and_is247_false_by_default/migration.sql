@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "FoodVendor" ALTER COLUMN "openingTime" DROP NOT NULL,
+ALTER COLUMN "closingTime" DROP NOT NULL,
+ALTER COLUMN "is247" SET DEFAULT false;

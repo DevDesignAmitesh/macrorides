@@ -13,21 +13,31 @@
  */
 
 import z, { ZodError } from "zod";
-import "dotenv/config"
+import "dotenv/config";
 
 if (!process.env.NODE_ENV) {
   throw new Error("NODE_ENV not found");
 }
 
-export type kitchenState = "OPEN" | "CLOSED" | "KITCHEN_BUSY";
+export type kitchenState = "OPEN" | "CLOSED" | "KITCHEN_BUSY" | "";
 export type vendorType = "FOOD" | "CLOTHING";
-export type operationalState = "OPEN" | "CLOSED" | "MAINTAINANCE";
+export type operationalState = "OPEN" | "CLOSED" | "MAINTENANCE" | "";
 export type locationLabel = "HOME" | "WORK" | "OUTLET" | "PICKUP" | "DROP";
 
 export type Notify = {
   success: (msg: string) => void;
   error: (msg: string) => void;
 };
+
+export type useCreateRoleBasedVendorProps =
+  | {
+      input: FoodVendorCreateOrUpdateInput;
+      type: "FOOD" | "";
+    }
+  | {
+      input: ClothVendorCreateOrUpdateInput;
+      type: "CLOTHING" | "";
+    };
 
 export const HTTP_URL =
   process.env.NODE_ENV === "production"
@@ -51,8 +61,13 @@ export const zodErrorMessage = ({ error }: { error: ZodError }) => {
  * TOKEN: ❌ NOT REQUIRED
  */
 export const accountSignupSchema = z.object({
-  phone: z.string(),
-  name: z.string(),
+  phone: z
+    .string()
+    .regex(
+      /^[6-9]\d{9}$/,
+      "Phone number must be a valid 10-digit Indian number"
+    ),
+  name: z.string().min(3, "name is too short"),
 
   // From vendor portal always send "VENDOR_OWNER"
   role: z.enum(["CUSTOMER", "VENDOR_OWNER"]),
@@ -76,8 +91,13 @@ export const accountSignupSchema = z.object({
  * TOKEN: ❌ NOT REQUIRED
  */
 export const accountOTPVerifySchema = z.object({
-  phone: z.string(),
-  otp: z.string(),
+  phone: z
+    .string()
+    .regex(
+      /^[6-9]\d{9}$/,
+      "Phone number must be a valid 10-digit Indian number"
+    ),
+  otp: z.string().regex(/^\d{6}$/, "OTP must be a 6-digit number"),
 });
 
 /**
@@ -99,7 +119,12 @@ export const accountOTPVerifySchema = z.object({
  * TOKEN: ❌ NOT REQUIRED
  */
 export const accountSigninSchema = z.object({
-  phone: z.string(),
+  phone: z
+    .string()
+    .regex(
+      /^[6-9]\d{9}$/,
+      "Phone number must be a valid 10-digit Indian number"
+    ),
 });
 
 /**
@@ -129,6 +154,23 @@ export const accountSigninSchema = z.object({
 /* ============================================================
    VENDOR MODULE
    ============================================================ */
+
+/**
+ * POST
+ * /vendors/email:type
+ *
+ */
+export type sendEmailType = "VENDOR_ONBOARDING_CONFIRMATION"; // more in future
+
+export const sendEmailSchema = z.object({
+  email: z.email(),
+  type: z.enum(["VENDOR_ONBOARDING_CONFIRMATION"]),
+});
+
+export interface SendEmailInput {
+  email: string;
+  type: sendEmailType;
+}
 
 /**
  * POST /vendors
@@ -233,7 +275,7 @@ export const createLocationSchema = z.array(
     vendorId: z.uuid(), // from URL params
     latitude: z.number(),
     longitude: z.number(),
-    address: z.string(),
+    address: z.string().min(10, "address is too short"),
     label: z.enum(["HOME", "WORK", "OUTLET", "PICKUP", "DROP"]),
   })
 );
@@ -272,9 +314,9 @@ export const foodVendorCreateOrUpdateSchema = z.object({
   vendorId: z.uuid(), // from URL params
   fssaiNumber: z.string(),
   kitchenState: z.enum(["OPEN", "CLOSED", "KITCHEN_BUSY"]),
-  openingTime: z.iso.datetime(), // ISO string
-  closingTime: z.iso.datetime(), // ISO string
-  is247: z.boolean(),
+  openingTime: z.iso.datetime().optional(), // ISO string
+  closingTime: z.iso.datetime().optional(), // ISO string
+  is247: z.boolean().optional(),
 });
 
 /**
@@ -283,8 +325,8 @@ export const foodVendorCreateOrUpdateSchema = z.object({
  */
 export const createFoodItemSchema = z.object({
   vendorId: z.uuid(), // from URL params
-  name: z.string(),
-  description: z.string(),
+  name: z.string().min(4, "item name is too short"),
+  description: z.string().min(20, "item description is too short"),
   price: z.number(),
   isAvailable: z.boolean(),
 });
@@ -309,8 +351,8 @@ export const clothVendorCreateOrUpdateSchema = z.object({
  */
 export const createClothingProductSchema = z.object({
   vendorId: z.uuid(), // from URL params
-  name: z.string(),
-  description: z.string(),
+  name: z.string().min(4, "item name is too short"),
+  description: z.string().min(20, "item description is too short"),
   brand: z.string(),
 });
 
@@ -342,6 +384,20 @@ export const createCategoriesSchema = z.object({
   vendorId: z.uuid(), // from URL params
   name: z.array(z.string()),
 });
+
+// MAP TYPES
+// /maps/suggestions/:input
+export const suggestionSchema = z.object({
+  input: z.string().min(3),
+});
+
+export interface SendMapDataToUser {
+  title: string;
+  shortDesc: string;
+  longDesc: string;
+  lat: number;
+  lng: number;
+}
 
 /* ============================================================
    COMMON TYPES
@@ -402,7 +458,7 @@ export interface AccountMeResponse {
 /** POST /vendors */
 export interface VendorCreateInput {
   outletName: string;
-  type: "FOOD" | "CLOTHING";
+  type: "FOOD" | "CLOTHING" | "";
   gstNumber?: string;
   panNumber: string;
   aadhaarNumber: string;
@@ -442,8 +498,8 @@ export interface VendorClosedDay {
 export interface FoodVendorDetails {
   fssaiNumber: string;
   kitchenState: "OPEN" | "CLOSED" | "KITCHEN_BUSY";
-  openingTime: ISODateString;
-  closingTime: ISODateString;
+  openingTime: ISODateString | undefined;
+  closingTime: ISODateString | undefined;
   is247: boolean;
 }
 
@@ -499,9 +555,7 @@ export interface CreateVendorLocationInput {
 /** POST /vendors/:vendorId/closed-days */
 export interface CreateClosedDayInput {
   vendorId: UUID; // URL param
-  closedDays: {
-    day: string;
-  }[];
+  closedDays: string[];
 }
 
 /** DELETE /vendors/:vendorId/closed-days/:id */
@@ -518,9 +572,9 @@ export interface DeleteClosedDayInput {
 export interface FoodVendorCreateOrUpdateInput {
   vendorId: UUID; // URL param
   fssaiNumber: string;
-  kitchenState: "OPEN" | "CLOSED" | "KITCHEN_BUSY";
-  openingTime: ISODateString;
-  closingTime: ISODateString;
+  kitchenState: kitchenState;
+  openingTime: ISODateString | undefined;
+  closingTime: ISODateString | undefined;
   is247: boolean;
 }
 
@@ -542,7 +596,7 @@ export interface CreateFoodItemInput {
 export interface ClothVendorCreateOrUpdateInput {
   vendorId: UUID; // URL param
   returnPolicy: string;
-  operationalState: "OPEN" | "CLOSED" | "MAINTAINANCE";
+  operationalState: operationalState;
 }
 
 /** POST /vendors/:vendorId/clothing/products */
@@ -573,5 +627,6 @@ export interface CreateClothingVariantInput {
  */
 export interface CreateCategoryInput {
   vendorId: UUID; // URL param
-  name: string;
+  name: string[];
+  type: vendorType | "";
 }

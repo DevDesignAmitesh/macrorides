@@ -49,7 +49,7 @@ export const getVendorService = async (req: Request, res: Response) => {
     }
 
     const dataToSend: VendorResponse = {
-      aadhaarNumber: vendor.aadhaarNumber,
+      aadhaarNumber: vendor.owner.aadhaarNumber ?? "",
       closedDays: vendor.closedDays,
       contactNumber: vendor.contactNumber,
       createdAt: vendor.createdAt.toISOString(),
@@ -70,17 +70,17 @@ export const getVendorService = async (req: Request, res: Response) => {
         accountId: vendor.owner.accountId,
         id: vendor.ownerId,
       },
-      panNumber: vendor.panNumber,
+      panNumber: vendor.owner.panNumber ?? "",
       type: vendor.type,
       gstNumber: vendor.gstNumber,
       updatedAt: vendor.updatedAt.toISOString(),
       clothVendor: vendor.clothVendor,
       foodVendor: vendor.foodVendor && {
-        closingTime: vendor.foodVendor?.closingTime.toISOString(),
+        closingTime: vendor.closingTime?.toISOString(),
         fssaiNumber: vendor.foodVendor.fssaiNumber,
-        is247: vendor.foodVendor.is247,
+        is247: vendor.is247,
         kitchenState: vendor.foodVendor.kitchenState,
-        openingTime: vendor.foodVendor.openingTime.toISOString(),
+        openingTime: vendor.openingTime?.toISOString(),
       },
     };
 

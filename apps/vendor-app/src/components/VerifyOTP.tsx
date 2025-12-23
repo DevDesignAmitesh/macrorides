@@ -85,7 +85,7 @@ const VerifyOTPPage: React.FC = () => {
             <h1 className="text-2xl font-bold text-black">Verify OTP</h1>
             <p className="text-gray-600 mt-2">
               Enter the 6-digit OTP sent to <br /> your registered phone number
-              {phone}
+              {" "} <span className="font-semibold">{phone}</span>
             </p>
           </div>
 

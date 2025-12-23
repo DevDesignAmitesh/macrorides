@@ -34,11 +34,14 @@ export const createClothingVendorService = async (
           vendorId,
         },
       })
-      .then(() => {
+      .then((data) => {
         return responsePlate({
           res,
           message: "cloth vendor created",
           status: 201,
+          data: {
+            vendorId: data.id 
+          }
         });
       })
       .catch((err) => {

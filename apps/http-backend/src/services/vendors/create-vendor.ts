@@ -6,6 +6,8 @@ import { prisma } from "@repo/db/db";
 export const createVendorService = async (req: Request, res: Response) => {
   try {
     const { userId } = req.user;
+    console.log("this is the tokenzied data of the user");
+    console.log(req.user);
     const { success, error, data } = vendorCreateSchema.safeParse(req.body);
 
     if (!success) {
@@ -16,11 +18,18 @@ export const createVendorService = async (req: Request, res: Response) => {
       });
     }
 
-    const { aadhaarNumber, contactNumber, outletName, panNumber, type } = data;
+    const {
+      contactNumber,
+      outletName,
+      type,
+      gstNumber,
+      aadhaarNumber,
+      panNumber,
+    } = data;
 
     const existingVendor = await prisma.vendor.findFirst({
       where: {
-        OR: [{ aadhaarNumber }, { contactNumber }, { panNumber }],
+        contactNumber,
       },
     });
 
@@ -36,43 +45,59 @@ export const createVendorService = async (req: Request, res: Response) => {
       return responsePlate({
         res,
         message: "vendor created successfully",
-        status: 201,
+        status: 200,
         data: {
           vendorId: existingVendor.id,
         },
       });
     }
 
-    await prisma.vendor
-      .create({
+    let vendorId: string = "";
+
+    await prisma.$transaction(async (tx) => {
+      const vendor = await tx.vendor.create({
         data: {
           ownerId: userId,
-          aadhaarNumber,
           contactNumber,
           outletName,
-          panNumber,
           type,
+          gstNumber,
         },
-      })
-      .then((data) => {
-        return responsePlate({
-          res,
-          message: "vendor created successfully",
-          status: 201,
-          data: {
-            vendorId: data.id,
-          },
-        });
-      })
-      .catch((e) => {
-        console.log("error while creating vendor in createVendorService ", e);
-
-        return responsePlate({
-          res,
-          message: "internal server error",
-          status: 503,
-        });
       });
+
+      vendorId = vendor.id;
+
+      const account = await prisma.account.findFirst({
+        where: {
+          vendorOwner: {
+            id: userId,
+          },
+        },
+      });
+
+      if (!account) {
+        throw new Error("Something went wrong");
+      }
+
+      await tx.vendorOwner.update({
+        where: {
+          accountId: account.id,
+        },
+        data: {
+          aadhaarNumber,
+          panNumber,
+        },
+      });
+    });
+
+    return responsePlate({
+      res,
+      message: "vendor created successfully",
+      status: 201,
+      data: {
+        vendorId,
+      },
+    });
   } catch (e) {
     console.log("error in createVendorService ", e);
     return responsePlate({

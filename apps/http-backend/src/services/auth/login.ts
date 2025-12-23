@@ -23,7 +23,7 @@ export const loginService = async (req: Request, res: Response) => {
     if (!existingUser) {
       return responsePlate({
         res,
-        message: `user not exists with phone ${phone}`,
+        message: `user not found please register`,
         status: 400,
       });
     }

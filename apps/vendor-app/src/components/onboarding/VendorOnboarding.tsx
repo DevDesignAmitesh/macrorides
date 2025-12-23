@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Save } from "lucide-react";
 import { StepIndicator } from "./StepIndicator";
@@ -13,27 +13,29 @@ import { StepCategories } from "./steps/StepCategories";
 import { StepSuccess } from "./steps/StepSuccess";
 import { useOnboardingStorage } from "./useOnboardingStorage";
 import { validateStep, ValidationErrors } from "./validation";
-import { vendorType } from "@repo/db/db";
+import {
+  useCreateBaseVendor,
+  useCreateCategories,
+  useCreateClosedDays,
+  useCreateLocation,
+  useCreateRoleBasedVendor,
+  useSendEmail,
+} from "@repo/hooks/hooks";
+import { notify } from "@/utils";
+import { StepEmailConfirmation } from "./steps/StepEmailConfirmation";
 
 const STEPS = [
+  { id: 1, title: "Vendor Details", description: "Basic information" },
+  { id: 2, title: "Business Details", description: "Operations info" },
+  { id: 3, title: "Location", description: "Outlet address" },
+  { id: 4, title: "Availability", description: "Weekly schedule" },
+  { id: 5, title: "Categories", description: "Products or cuisines" },
   {
-    id: 1,
-    title: "Vendor Details",
-    description: "Basic information to identify your business",
+    id: 6,
+    title: "Email Confirmation",
+    description: "Confirm your email for updates",
   },
-  {
-    id: 2,
-    title: "Business Details",
-    description: "Operations and compliance information",
-  },
-  { id: 3, title: "Location", description: "Outlet address and coordinates" },
-  {
-    id: 4,
-    title: "Availability",
-    description: "Weekly schedule and closed days",
-  },
-  { id: 5, title: "Categories", description: "Product or cuisine categories" },
-  { id: 6, title: "Complete", description: "Review and submit" },
+  { id: 7, title: "Complete", description: "Finish onboarding" },
 ];
 
 export function VendorOnboarding() {
@@ -49,8 +51,17 @@ export function VendorOnboarding() {
   const [slideDirection, setSlideDirection] = useState<"left" | "right">(
     "right"
   );
+  const [vendorId, setVendorId] = useState<string>(
+    localStorage.getItem("vendorId") ?? ""
+  );
 
-  const vendorType = data.vendorBasics.vendorType as vendorType;
+  const TOKEN = localStorage.getItem("token") ?? "";
+
+  useEffect(() => {
+    localStorage.setItem("vendorId", vendorId);
+  }, [vendorId]);
+
+  const vendorType = data.vendorBasics.vendorType;
 
   const currentStepInfo = useMemo(() => {
     const step = STEPS.find((s) => s.id === currentStep);
@@ -68,16 +79,125 @@ export function VendorOnboarding() {
     return step!;
   }, [currentStep, vendorType]);
 
+  const { loading: l1, handleCreateBaseVendor } = useCreateBaseVendor({
+    token: TOKEN,
+    notify: notify,
+  });
+
+  const { loading: l2, handleCreateRoleBasedVendor } = useCreateRoleBasedVendor(
+    {
+      notify: notify,
+      vendorId: vendorId,
+      token: TOKEN,
+    }
+  );
+
+  const { loading: l3, handleCreateLocation } = useCreateLocation({
+    notify: notify,
+    token: TOKEN,
+    vendorId,
+  });
+
+  const { loading: l4, handleCreateClosedDays } = useCreateClosedDays({
+    notify: notify,
+    vendorId: vendorId,
+    token: TOKEN,
+  });
+
+  const { loading: l5, handleCreateCategories } = useCreateCategories({
+    notify: notify,
+    vendorId: vendorId,
+    token: TOKEN,
+  });
+
+  const { loading: l6, handleSendEmail } = useSendEmail({
+    notify: notify,
+    token: TOKEN,
+  });
+
+  const handleSuccess = () => {
+    setErrors({});
+    setSlideDirection("right");
+    setCurrentStep(Math.min(currentStep + 1, 7));
+  };
+
   const handleNext = () => {
+    if (isLoading) return;
     const validationErrors = validateStep(currentStep, data, vendorType);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
 
-    setErrors({});
-    setSlideDirection("right");
-    setCurrentStep(Math.min(currentStep + 1, 6));
+    if (currentStep === 1) {
+      handleCreateBaseVendor({
+        handleSuccess: (vendorId) => {
+          setVendorId(vendorId);
+          handleSuccess();
+        },
+        input: {
+          ...data.vendorBasics,
+          type: data.vendorBasics.vendorType,
+        },
+      });
+      return;
+    } else if (currentStep === 2) {
+      if (data.vendorBasics.vendorType === "CLOTHING") {
+        handleCreateRoleBasedVendor({
+          handleSuccess,
+          main: {
+            type: data.vendorBasics.vendorType,
+            input: {
+              ...data.clothingBusiness,
+              vendorId: vendorId,
+            },
+          },
+        });
+      } else if (data.vendorBasics.vendorType === "FOOD") {
+        handleCreateRoleBasedVendor({
+          handleSuccess,
+          main: {
+            type: data.vendorBasics.vendorType,
+            input: {
+              ...data.foodBusiness,
+              vendorId: vendorId,
+            },
+          },
+        });
+      }
+      return;
+    } else if (currentStep === 3) {
+      handleCreateLocation({
+        handleSuccess,
+        input: [{ ...data.location, vendorId }],
+      });
+      return;
+    } else if (currentStep === 4) {
+      handleCreateClosedDays({
+        handleSuccess,
+        input: { ...data.closedDays, vendorId: vendorId },
+      });
+      return;
+    } else if (currentStep === 5) {
+      handleCreateCategories({
+        handleSuccess,
+        input: {
+          name: data.categories.categories,
+          vendorId: vendorId,
+          type: data.vendorBasics.vendorType,
+        },
+      });
+      return;
+    } else if (currentStep === 6) {
+      handleSendEmail({
+        handleSuccess,
+        input: {
+          email: data.email,
+          type: "VENDOR_ONBOARDING_CONFIRMATION",
+        },
+      });
+      return;
+    }
   };
 
   const handleBack = () => {
@@ -99,7 +219,9 @@ export function VendorOnboarding() {
     // In real app, would navigate to dashboard
   };
 
-  const isComplete = currentStep === 6;
+  const isComplete = currentStep === 7;
+
+  const isLoading = l1 || l2 || l3 || l4 || l5 || l6;
 
   return (
     <div className="min-h-screen bg-background">
@@ -215,6 +337,13 @@ export function VendorOnboarding() {
                 )}
 
                 {currentStep === 6 && (
+                  <StepEmailConfirmation
+                    email={data.email}
+                    onEmailChange={(email) => updateData("email", email)}
+                  />
+                )}
+
+                {currentStep === 7 && (
                   <StepSuccess
                     outletName={data.vendorBasics.outletName || "Your Outlet"}
                     onGoToDashboard={handleGoToDashboard}
@@ -228,6 +357,7 @@ export function VendorOnboarding() {
                   <div>
                     {currentStep > 1 && (
                       <Button
+                        disabled={isLoading}
                         variant="ghost"
                         onClick={handleBack}
                         className="gap-2"
@@ -237,8 +367,16 @@ export function VendorOnboarding() {
                       </Button>
                     )}
                   </div>
-                  <Button onClick={handleNext} className="gap-2">
-                    {currentStep === 5 ? "Complete" : "Next"}
+                  <Button
+                    disabled={isLoading}
+                    onClick={handleNext}
+                    className="gap-2"
+                  >
+                    {isLoading
+                      ? "Processing..."
+                      : currentStep === 6
+                        ? "Confirm & Finish"
+                        : "Next"}
                     <ArrowRight className="w-4 h-4" />
                   </Button>
                 </div>

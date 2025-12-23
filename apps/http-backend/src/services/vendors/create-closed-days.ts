@@ -20,34 +20,20 @@ export const createClosedDaysService = async (req: Request, res: Response) => {
 
     const { vendorId, closedDays } = data;
 
-    await prisma.closedDays
-      .createMany({
-        data: closedDays.map((dt) => {
-          return {
-            day: dt,
-            vendorId: vendorId,
-          };
-        }),
-      })
-      .then(() => {
-        return responsePlate({
-          res,
-          message: "closed days created successfully",
-          status: 201,
-        });
-      })
-      .catch((er) => {
-        console.log(
-          "error while creating closed days in createClosedDaysService ",
-          er
-        );
+    await prisma.closedDays.createMany({
+      data: closedDays.map((dt) => {
+        return {
+          day: dt,
+          vendorId: vendorId,
+        };
+      }),
+    });
 
-        return responsePlate({
-          res,
-          message: "internal server error",
-          status: 503,
-        });
-      });
+    return responsePlate({
+      res,
+      message: "Availability added successfully",
+      status: 201,
+    });
   } catch (e) {
     console.log("error in createClosedDaysService ", e);
     return responsePlate({

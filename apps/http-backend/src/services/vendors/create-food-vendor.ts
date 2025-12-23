@@ -23,42 +23,51 @@ export const createFoodVendorService = async (req: Request, res: Response) => {
 
     const {
       closingTime,
+      openingTime,
       fssaiNumber,
       is247,
       kitchenState,
-      openingTime,
       vendorId,
     } = data;
 
-    await prisma.foodVendor
-      .create({
+    await prisma.$transaction(async (tx) => {
+      await tx.foodVendor.create({
         data: {
-          closingTime,
           fssaiNumber,
-          is247,
           kitchenState,
-          openingTime,
           vendorId,
         },
-      })
-      .then(() => {
-        return responsePlate({
-          res,
-          message: "food vendor created",
-          status: 201,
-        });
-      })
-      .catch((err) => {
-        console.log(
-          "error while creating food vendor in createFoodVendorService ",
-          err
-        );
-        return responsePlate({
-          res,
-          message: "internal server error",
-          status: 503,
-        });
       });
+
+      if (openingTime && closingTime) {
+        await tx.vendor.update({
+          where: {
+            id: vendorId,
+          },
+          data: {
+            openingTime: new Date(openingTime),
+            closingTime: new Date(closingTime),
+          },
+        });
+      }
+
+      if (is247) {
+        await tx.vendor.update({
+          where: {
+            id: vendorId,
+          },
+          data: {
+            is247,
+          },
+        });
+      }
+    });
+
+    return responsePlate({
+      res,
+      message: "Vendor details updated, successfully",
+      status: 201,
+    });
   } catch (e) {
     console.log("error in createFoodVendorService ", e);
     return responsePlate({

@@ -12,6 +12,8 @@
     "@repo/db": "workspace:*",
     "@repo/otp": "workspace:*",
     "@repo/types": "workspace:*",
+    "@repo/maps": "workspace:*",
+    "@repo/email": "workspace:*",
     "@repo/typescript-config": "workspace:*"
   },
   "keywords": [],

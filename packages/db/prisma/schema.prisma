@@ -145,12 +145,16 @@ model Customer {
 
 model VendorOwner {
   id        String  @id @default(uuid())
+
   accountId String  @unique
   account   Account @relation(references: [id], fields: [accountId])
 
-  vendorOwner Vendor[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  panNumber     String? @unique
+  aadhaarNumber String? @unique
+
+  vendor    Vendor[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Vendor {
@@ -159,12 +163,15 @@ model Vendor {
   type          vendorType
   isVerified    Boolean    @default(false)
   gstNumber     String?
-  panNumber     String     @unique
-  aadhaarNumber String     @unique
-  contactNumber String     @unique
+  contactNumber String    @unique
+  openingTime  DateTime?
+  closingTime  DateTime?
+  is247        Boolean      @default(false)
+
 
   location   VendorSavedLocation[]
   closedDays ClosedDays[]
+  categories Categories[]
   wallet     Wallet?
 
   ownerId String
@@ -191,16 +198,12 @@ model FoodVendor {
   vendorId String @unique
   vendor   Vendor @relation(references: [id], fields: [vendorId])
 
-  foodCategories FoodCategories[]
-  foodItem       FoodItem[]
-  foodDelivery   FoodDelivery[]
-  foodOrder      FoodOrder[]
+  foodItem     FoodItem[]
+  foodDelivery FoodDelivery[]
+  foodOrder    FoodOrder[]
 
   fssaiNumber  String
   kitchenState kitchenState
-  openingTime  DateTime
-  closingTime  DateTime
-  is247        Boolean
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -212,10 +215,9 @@ model ClothVendor {
   vendorId String @unique
   vendor   Vendor @relation(references: [id], fields: [vendorId])
 
-  clothingCategories ClothingCategories[]
-  clothingProduct    ClothingProduct[]
-  clothingOrder      ClothingOrder[]
-  clothDelivery      ClothDelivery[]
+  clothingProduct ClothingProduct[]
+  clothingOrder   ClothingOrder[]
+  clothDelivery   ClothDelivery[]
 
   returnPolicy     String
   operationalState operationalState
@@ -288,7 +290,9 @@ model UserSavedLocation {
 
 model VendorSavedLocation {
   id           String @id @default(uuid())
-  contactPhone String // this will come from that particular vendor for which we are adding or updating
+  
+  // this will come from that particular vendor for which we are adding or updating
+  contactPhone String 
 
   locationId String
   location   Location @relation(references: [id], fields: [locationId])
@@ -301,7 +305,8 @@ model VendorSavedLocation {
 }
 
 model DriverLocation {
-  id       String @id @default(uuid())
+  id String @id @default(uuid())
+
   driverId String @unique
   driver   Driver @relation(references: [id], fields: [driverId])
 
@@ -316,34 +321,8 @@ model Categories {
   id   String @id @default(uuid())
   name String
 
-  foodCategories     FoodCategories[]
-  clothingCategories ClothingCategories[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model FoodCategories {
-  id String @id @default(uuid())
-
-  foodVendorId String
-  foodVendor   FoodVendor @relation(references: [id], fields: [foodVendorId])
-
-  categoriesId String
-  categories   Categories @relation(references: [id], fields: [categoriesId])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model ClothingCategories {
-  id String @id @default(uuid())
-
-  clothVendorId String
-  clothVendor   ClothVendor @relation(references: [id], fields: [clothVendorId])
-
-  categoriesId String
-  categories   Categories @relation(references: [id], fields: [categoriesId])
+  vendorId String
+  vendor   Vendor @relation(references: [id], fields: [vendorId])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

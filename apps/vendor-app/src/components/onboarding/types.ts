@@ -1,4 +1,4 @@
-export type VendorType = "FOOD" | "CLOTHING" | "";
+import { kitchenState, locationLabel, operationalState, vendorType } from "@repo/types/types";
 
 export interface VendorOnboardingData {
   // Step 1
@@ -7,27 +7,27 @@ export interface VendorOnboardingData {
     panNumber: string;
     contactNumber: string;
     outletName: string;
-    vendorType: VendorType;
+    vendorType: vendorType | "";
   };
   // Step 2 - Food
   foodBusiness: {
     fssaiNumber: string;
-    kitchenState: string;
-    is24x7Open: boolean;
-    openingTime: string;
-    closingTime: string;
+    kitchenState: kitchenState;
+    is247: boolean;
+    openingTime: string | undefined;
+    closingTime: string | undefined;
   };
   // Step 2 - Clothing
   clothingBusiness: {
-    operationalState: "OPEN" | "CLOSED" | "MAINTENANCE" | "";
+    operationalState: operationalState;
     returnPolicy: string;
   };
   // Step 3
   location: {
     address: string;
-    latitude: string;
-    longitude: string;
-    locationLabel: string;
+    latitude: number;
+    longitude: number;
+    label: locationLabel;
   };
   // Step 4
   closedDays: {
@@ -37,6 +37,8 @@ export interface VendorOnboardingData {
   categories: {
     categories: string[];
   };
+  // step 6
+  email: string
 }
 
 export const initialOnboardingData: VendorOnboardingData = {
@@ -50,9 +52,9 @@ export const initialOnboardingData: VendorOnboardingData = {
   foodBusiness: {
     fssaiNumber: "",
     kitchenState: "",
-    is24x7Open: false,
-    openingTime: "",
-    closingTime: "",
+    is247: false,
+    openingTime: undefined,
+    closingTime: undefined,
   },
   clothingBusiness: {
     operationalState: "",
@@ -60,9 +62,9 @@ export const initialOnboardingData: VendorOnboardingData = {
   },
   location: {
     address: "",
-    latitude: "",
-    longitude: "",
-    locationLabel: "OUTLET",
+    latitude: 0,
+    longitude: 0,
+    label: "OUTLET",
   },
   closedDays: {
     closedDays: [],
@@ -70,4 +72,5 @@ export const initialOnboardingData: VendorOnboardingData = {
   categories: {
     categories: [],
   },
+  email: ""
 };

@@ -2,6 +2,7 @@ import { Input } from "@/components/ui/input";
 import { FormField } from "../FormFeild";
 import { RadioCard } from "../RadioCard";
 import { UtensilsCrossed, Shirt } from "lucide-react";
+import { vendorType } from "@repo/types/types";
 
 export interface VendorBasicsData {
   aadhaarNumber: string;
@@ -33,7 +34,7 @@ export function StepVendorBasics({
     <div className="space-y-6 animate-slide-in-right">
       <div className="grid md:grid-cols-2 gap-4">
         <FormField
-          label="Aadhaar Number"
+          label="Owner Aadhaar Number"
           htmlFor="aadhaar"
           required
           error={errors.aadhaarNumber}
@@ -50,7 +51,7 @@ export function StepVendorBasics({
         </FormField>
 
         <FormField
-          label="PAN Number"
+          label="Owner PAN Number"
           htmlFor="pan"
           required
           error={errors.panNumber}
@@ -71,7 +72,7 @@ export function StepVendorBasics({
 
       <div className="grid md:grid-cols-2 gap-4">
         <FormField
-          label="Contact Number"
+          label="Outlet Contact Number"
           htmlFor="contact"
           required
           error={errors.contactNumber}
@@ -125,7 +126,7 @@ export function StepVendorBasics({
           ]}
           value={data.vendorType}
           onChange={(value) =>
-            updateField("vendorType", value as "FOOD" | "CLOTHING")
+            updateField("vendorType", value as vendorType)
           }
           className="md:grid-cols-2"
         />

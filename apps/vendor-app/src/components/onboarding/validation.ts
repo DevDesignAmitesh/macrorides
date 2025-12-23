@@ -1,11 +1,12 @@
-import { VendorOnboardingData, VendorType } from "./types";
+import { vendorType } from "@repo/types/types";
+import { VendorOnboardingData } from "./types";
 
 export type ValidationErrors = Partial<Record<string, string>>;
 
 export function validateStep(
   step: number,
   data: VendorOnboardingData,
-  vendorType: VendorType
+  vendorType: vendorType | ""
 ): ValidationErrors {
   const errors: ValidationErrors = {};
 
@@ -51,7 +52,7 @@ export function validateStep(
           errors.kitchenState = "Kitchen state is required";
         }
 
-        if (!foodBusiness.is24x7Open) {
+        if (!foodBusiness.is247) {
           if (!foodBusiness.openingTime) {
             errors.openingTime = "Opening time is required";
           }
@@ -76,7 +77,7 @@ export function validateStep(
       if (!location.address.trim()) {
         errors.address = "Address is required";
       }
-      if (!location.locationLabel) {
+      if (!location.label) {
         errors.locationLabel = "Location label is required";
       }
       break;

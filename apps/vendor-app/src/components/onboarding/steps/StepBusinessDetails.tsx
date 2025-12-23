@@ -11,22 +11,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { kitchenState, operationalState, vendorType } from "@repo/types/types";
 
 export interface FoodBusinessData {
   fssaiNumber: string;
-  kitchenState: string;
-  is24x7Open: boolean;
-  openingTime: string;
-  closingTime: string;
+  kitchenState: kitchenState;
+  is247: boolean;
+  openingTime: string | undefined;
+  closingTime: string | undefined;
 }
 
 export interface ClothingBusinessData {
-  operationalState: "OPEN" | "CLOSED" | "MAINTENANCE" | "";
+  operationalState: operationalState;
   returnPolicy: string;
 }
 
 interface StepBusinessDetailsProps {
-  vendorType: "FOOD" | "CLOTHING";
+  vendorType: vendorType;
   foodData: FoodBusinessData;
   clothingData: ClothingBusinessData;
   onFoodChange: (data: FoodBusinessData) => void;
@@ -34,37 +35,7 @@ interface StepBusinessDetailsProps {
   errors: Partial<Record<string, string>>;
 }
 
-const INDIAN_STATES = [
-  "Andhra Pradesh",
-  "Arunachal Pradesh",
-  "Assam",
-  "Bihar",
-  "Chhattisgarh",
-  "Goa",
-  "Gujarat",
-  "Haryana",
-  "Himachal Pradesh",
-  "Jharkhand",
-  "Karnataka",
-  "Kerala",
-  "Madhya Pradesh",
-  "Maharashtra",
-  "Manipur",
-  "Meghalaya",
-  "Mizoram",
-  "Nagaland",
-  "Odisha",
-  "Punjab",
-  "Rajasthan",
-  "Sikkim",
-  "Tamil Nadu",
-  "Telangana",
-  "Tripura",
-  "Uttar Pradesh",
-  "Uttarakhand",
-  "West Bengal",
-  "Delhi",
-];
+const KITCHEN_STATES = ["OPEN", "CLOSED", "KITCHEN_BUSY"];
 
 export function StepBusinessDetails({
   vendorType,
@@ -105,14 +76,14 @@ export function StepBusinessDetails({
           <Select
             value={foodData.kitchenState}
             onValueChange={(value) =>
-              onFoodChange({ ...foodData, kitchenState: value })
+              onFoodChange({ ...foodData, kitchenState: value as kitchenState })
             }
           >
             <SelectTrigger id="kitchenState">
               <SelectValue placeholder="Select state" />
             </SelectTrigger>
             <SelectContent>
-              {INDIAN_STATES.map((state) => (
+              {KITCHEN_STATES.map((state) => (
                 <SelectItem key={state} value={state}>
                   {state}
                 </SelectItem>
@@ -132,14 +103,14 @@ export function StepBusinessDetails({
           </div>
           <Switch
             id="is24x7"
-            checked={foodData.is24x7Open}
+            checked={foodData.is247}
             onCheckedChange={(checked) =>
-              onFoodChange({ ...foodData, is24x7Open: checked })
+              onFoodChange({ ...foodData, is247: checked })
             }
           />
         </div>
 
-        {!foodData.is24x7Open && (
+        {!foodData.is247 && (
           <div className="grid md:grid-cols-2 gap-4 animate-fade-in">
             <FormField
               label="Opening Time"

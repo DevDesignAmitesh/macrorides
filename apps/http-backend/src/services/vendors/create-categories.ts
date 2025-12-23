@@ -5,9 +5,8 @@ import { prisma } from "@repo/db/db";
 
 export const createCategoriesService = async (req: Request, res: Response) => {
   try {
-    const { success, error, data } = createCategoriesSchema.safeParse({
-      ...req.body,
-    });
+    console.log(req.body);
+    const { success, error, data } = createCategoriesSchema.safeParse(req.body);
 
     if (!success) {
       return responsePlate({
@@ -19,35 +18,26 @@ export const createCategoriesService = async (req: Request, res: Response) => {
 
     const { vendorId, name } = data;
 
-    await prisma.categories
-      .createMany({
-        data: name.map((nm) => {
-          return {
-            vendorId: vendorId,
-            name: nm,
-          };
-        }),
-      })
-      .then(() => {
-        return responsePlate({
-          res,
-          message: "categroies created successfully",
-          status: 201,
-        });
-      })
-      .catch((err) => {
-        console.log(
-          "error while creating categories in createCategoriesService ",
-          err
-        );
-        return responsePlate({
-          res,
-          message: "internal server error",
-          status: 503,
-        });
+    for (const categoryName of name) {
+      await prisma.categories.create({
+        data: {
+          name: categoryName,
+          vendorId,
+        },
       });
-  } catch (e) {
-    console.log("error in createCategoriesService ", e);
+    }
+
+    return responsePlate({
+      res,
+      message: "categories created successfully",
+      status: 201,
+    });
+  } catch (err) {
+    console.log(
+      "error while creating categories in createCategoriesService",
+      err
+    );
+
     return responsePlate({
       res,
       message: "internal server error",
