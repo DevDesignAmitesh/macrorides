@@ -32,25 +32,5 @@
     "multer": "^2.0.2",
     "uuid": "^13.0.0",
     "zod": "^4.2.1"
-  },
-  "references": [
-    {
-      "path": "../../packages/types"
-    },
-    {
-      "path": "../../packages/db"
-    },
-    {
-      "path": "../../packages/otp"
-    },
-    {
-      "path": "../../packages/hooks"
-    },
-    {
-      "path": "../../packages/email"
-    },
-    {
-      "path": "../../packages/maps"
-    }
-  ]
+  }
 }
