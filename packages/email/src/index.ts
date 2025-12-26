@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { sendEmailType } from "@repo/types/types";
 import nodemailer from "nodemailer";
 import handlebars from "handlebars";
@@ -8,9 +9,9 @@ import path from "path";
 const ADMIN_MAIL = process.env.ADMIN_MAIL
 const ADMIN_MAIL_PASS = process.env.ADMIN_MAIL_PASS
 
-if(!ADMIN_MAIL || !ADMIN_MAIL_PASS) {
-  throw new Error("envs not found")
-}
+// if(!ADMIN_MAIL || !ADMIN_MAIL_PASS) {
+//   throw new Error("envs not found")
+// }
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
