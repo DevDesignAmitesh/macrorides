@@ -5,8 +5,9 @@ import { Response } from "express";
 import { sign, verify } from "jsonwebtoken";
 import ImageKit from "imagekit";
 import crypto from "crypto";
+import { getEnv } from "./evn";
 
-export const JWT_SECRET = process.env.JWT_SECRET;
+export const JWT_SECRET = getEnv().JWT_SECRET
 
 if (!JWT_SECRET) {
   throw new Error("JWT_SECRET not found");

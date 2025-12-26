@@ -15,10 +15,6 @@
 import z, { ZodError } from "zod";
 import "dotenv/config";
 
-// if (!process.env.NODE_ENV) {
-//   throw new Error("NODE_ENV not found");
-// }
-
 export type kitchenState = "OPEN" | "CLOSED" | "KITCHEN_BUSY" | "";
 export type vendorType = "FOOD" | "CLOTHING";
 export type operationalState = "OPEN" | "CLOSED" | "MAINTENANCE" | "";

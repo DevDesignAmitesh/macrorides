@@ -20,6 +20,7 @@
     "./maps": "./dist/index.js"
   },
   "dependencies": {
-    "dotenv": "^17.2.3"
+    "dotenv": "^17.2.3",
+    "zod": "^4.2.1"
   }
 }

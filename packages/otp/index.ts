@@ -1,8 +1,8 @@
 import { prisma } from "@repo/db/db";
 
-const email = process.env.MC_EMAIL || "admin@macrorides.com";
-const customerId = process.env.MC_CUSTOMER_ID || "C-83690DF4FB084F8";
-const key = process.env.MC_KEY || "TWFjcm8yMEAyNg==";
+const email = process.env.MC_EMAIL;
+const customerId = process.env.MC_CUSTOMER_ID;
+const key = process.env.MC_KEY;
 
 class OtpStore {
   private static instance: OtpStore | null;

@@ -1,8 +1,9 @@
 import "dotenv/config";
 import { SendMapDataToUser } from "@repo/types/types";
+import { getEnv } from "./env";
 
-const MAPS_CLIENT_SECRET = process.env.MAPS_CLIENT_SECRET;
-const MAPS_CLIENT_ID = process.env.MAPS_CLIENT_ID;
+const MAPS_CLIENT_SECRET = getEnv().MAPS_CLIENT_SECRET;
+const MAPS_CLIENT_ID = getEnv().MAPS_CLIENT_ID;
 
 if (!MAPS_CLIENT_ID || !MAPS_CLIENT_SECRET) {
   throw new Error("envs not found");

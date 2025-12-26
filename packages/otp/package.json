@@ -11,12 +11,16 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@types/node": "^25.0.3",
+    "@repo/db": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@repo/db": "workspace:*"
+    "@types/node": "^25.0.3"
   },
   "types": "dist/index.d.ts",
   "exports": {
     "./otp": "./dist/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "zod": "^4.2.1"
   }
 }

@@ -5,13 +5,10 @@ import handlebars from "handlebars";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import path from "path";
+import { getEnv } from "./env.js";
 
-const ADMIN_MAIL = process.env.ADMIN_MAIL
-const ADMIN_MAIL_PASS = process.env.ADMIN_MAIL_PASS
-
-// if(!ADMIN_MAIL || !ADMIN_MAIL_PASS) {
-//   throw new Error("envs not found")
-// }
+const ADMIN_MAIL = getEnv().ADMIN_MAIL
+const ADMIN_MAIL_PASS = getEnv().ADMIN_MAIL_PASS
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
