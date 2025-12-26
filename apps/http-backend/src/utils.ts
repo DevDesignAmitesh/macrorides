@@ -9,10 +9,6 @@ import { getEnv } from "./evn";
 
 export const JWT_SECRET = getEnv().JWT_SECRET
 
-if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET not found");
-}
-
 export const responsePlate = ({
   res,
   message,
