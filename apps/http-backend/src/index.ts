@@ -1,6 +1,4 @@
-if (!process.env.VERCEL) {
-  require("dotenv").config();
-}
+import "dotenv/config";
 import express, { Express } from "express";
 import { authRouter } from "./routes/auth";
 import { accountRouter } from "./routes/account";
@@ -15,7 +13,11 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: [
+      "http://localhost:3000",
+      "https://partners.macrorides.com",
+      "https://partners.macrorides.in",
+    ],
     credentials: true,
     optionsSuccessStatus: 200,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -29,7 +31,7 @@ app.use("/api/v1/vendors", vendorRouter);
 app.use("/api/v1/maps", mapRouter);
 
 app.get("/api/health", (_req, res) => {
-  res.json({ ok: true });
+  res.send("good hai");
 });
 
-module.exports = app;
+app.listen(PORT, () => console.log("code is running at ", PORT));
