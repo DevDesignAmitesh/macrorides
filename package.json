@@ -2,14 +2,9 @@
   "name": "main-code",
   "private": true,
   "scripts": {
-    "build:types": "pnpm --filter @repo/types build",
-    "build:db": "pnpm --filter @repo/db build",
-    "build:shared": "pnpm run build:types && pnpm run build:db",
-    "build:packages": "pnpm -r --filter ./packages/* build",
-    "build:be": "pnpm --filter http-backend build",
-    "build:vendor-app": "pnpm --filter vendor-app build",
-    "final:script:be": "pnpm run build:shared && pnpm run build:packages && pnpm run build:be",
-    "final:script:vendor-app": "pnpm run build:shared && pnpm run build:packages && pnpm run build:vendor-app"
+    "build:backend": "pnpm turbo run build --filter=http-backend",
+    "db:stuff": "cd packages/db && npx prisma migrate dev -n 'init' && npx prisma generate",
+    "final:build:be": "pnpm run db:stuff && pnpm run build:backend"
   },
   "devDependencies": {
     "prettier": "^3.7.4",
