@@ -23,7 +23,6 @@
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
-    "@repo/db": "workspace:*",
     "@repo/hooks": "workspace:*",
     "@repo/types": "workspace:*",
     "@tailwindcss/postcss": "^4",

@@ -10,14 +10,16 @@
     "migrate:db": "cd packages/db && npx prisma migrate dev -n 'init'",
     "generate:db": "cd packages/db && npx prisma generate",
     "build:db": "cd packages/db && pnpm build",
-    "final:db": "pnpm i && pnpm run migrate:db && pnpm run generate:db && pnpm run build:db",
+    "final:db": "pnpm run migrate:db && pnpm run generate:db && pnpm run build:db",
     "build:types": "cd packages/types && pnpm build",
     "build:packages": "pnpm --filter ./packages/** run build",
-    "final:build:packages": "pnpm i && pnpm run build:db && pnpm run build:types && pnpm run build:packages",
-    "build:be": "pnpm i && cd apps/http-backend && pnpm build",
-    "build:vendor-app": "pnpm i && cd apps/vendor-app && pnpm build",
+    "final:build:packages": "pnpm run build:db && pnpm run build:types && pnpm run build:packages",
+    "build:be": "cd apps/http-backend && pnpm build",
+    "build:vendor-app": "cd apps/vendor-app && pnpm build",
     "start:vendor-app": "cd apps/vendor-app && pnpm start",
-    "start:be": "cd apps/http-backend && pnpm start"
+    "start:be": "cd apps/http-backend && pnpm start",
+    "final:start:be": "pnpm i && pnpm run final:db && pnpm run final:build:packages && pnpm run build:be",
+    "final:start:vendor-app": "pnpm i && pnpm run final:db && pnpm run final:build:packages && pnpm run build:vendor-app"
   },
   "devDependencies": {
     "prettier": "^3.7.4",
