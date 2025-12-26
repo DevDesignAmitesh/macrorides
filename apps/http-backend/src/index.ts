@@ -1,7 +1,7 @@
 if (!process.env.VERCEL) {
   require("dotenv").config();
 }
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import { authRouter } from "./routes/auth";
 import { accountRouter } from "./routes/account";
 import { vendorRouter } from "./routes/vendor";
@@ -32,6 +32,4 @@ app.get("/api/health", (_req, res) => {
   res.json({ ok: true });
 });
 
-export default function handler(req: Request, res: Response) {
-  return app(req, res);
-}
+module.exports = app;
