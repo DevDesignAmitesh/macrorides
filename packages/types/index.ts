@@ -13,7 +13,6 @@
  */
 
 import z, { ZodError } from "zod";
-import "dotenv/config";
 import { getEnv } from "./env.js";
 
 export type kitchenState = "OPEN" | "CLOSED" | "KITCHEN_BUSY" | "";

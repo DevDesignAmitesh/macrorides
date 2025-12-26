@@ -1,3 +1,6 @@
+if (!process.env.VERCEL) {
+  require("dotenv").config();
+}
 import express, { Express } from "express";
 import { authRouter } from "./routes/auth";
 import { accountRouter } from "./routes/account";

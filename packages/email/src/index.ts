@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { sendEmailType } from "@repo/types/types";
 import nodemailer from "nodemailer";
 import handlebars from "handlebars";

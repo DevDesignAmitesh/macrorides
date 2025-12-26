@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { SendMapDataToUser } from "@repo/types/types";
 import { getEnv } from "./env";
 
