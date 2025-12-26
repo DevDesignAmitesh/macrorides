@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build:backend": "pnpm turbo run build --filter=http-backend",
+    "build:vendor-app": "pnpm turbo run build --filter=vendor-app",
     "db:generate": "cd packages/db && npx prisma generate",
     "final:build:be": "pnpm run db:generate && pnpm run build:backend"
   },

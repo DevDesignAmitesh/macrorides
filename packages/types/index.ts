@@ -37,7 +37,7 @@ export type useCreateRoleBasedVendorProps =
 
 export const HTTP_URL =
   getEnv().NODE_ENV === "production"
-    ? "http://wrong:4000/api/v1"
+    ? "https://macrorides.onrender.com/api/v1"
     : "http://localhost:4000/api/v1";
 
 export type roles = "CUSTOMER" | "VENDOR_OWNER" | "DRIVER";
