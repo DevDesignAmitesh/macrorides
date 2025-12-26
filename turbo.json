@@ -4,16 +4,28 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
+      "inputs": ["$TURBO_DEFAULT$"],
       "env": []
     },
+
+    "build:next": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+
+    "build:node": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+
     "lint": {
       "dependsOn": ["^lint"]
     },
+
     "check-types": {
       "dependsOn": ["^check-types"]
     },
+
     "dev": {
       "cache": false,
       "persistent": true
