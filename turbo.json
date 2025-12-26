@@ -8,6 +8,8 @@
       "env": []
     },
 
+    
+
     "build:next": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"]
