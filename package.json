@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "build:backend": "pnpm turbo run build --filter=http-backend",
-    "db:stuff": "cd packages/db && npx prisma migrate dev -n 'init' && npx prisma generate",
-    "final:build:be": "pnpm run db:stuff && pnpm run build:backend"
+    "db:generate": "cd packages/db && npx prisma generate",
+    "final:build:be": "pnpm run db:generate && pnpm run build:backend"
   },
   "devDependencies": {
     "prettier": "^3.7.4",
@@ -12,7 +12,7 @@
     "typescript": "5.9.2"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=18"  
   },
   "packageManager": "pnpm@10.26.0"
 }
