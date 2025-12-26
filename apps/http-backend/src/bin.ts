@@ -1,3 +1,3 @@
-import { app, PORT } from ".";
+// import { app, PORT } from ".";
 
-app.listen(PORT, () => console.log("code is running at port ", PORT))
+// app.listen(PORT, () => console.log("code is running at port ", PORT))

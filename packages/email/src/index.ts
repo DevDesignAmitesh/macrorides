@@ -5,6 +5,13 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import path from "path";
 
+const ADMIN_MAIL = process.env.ADMIN_MAIL
+const ADMIN_MAIL_PASS = process.env.ADMIN_MAIL_PASS
+
+if(!ADMIN_MAIL || !ADMIN_MAIL_PASS) {
+  throw new Error("envs not found")
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -32,8 +39,8 @@ class EmailStore {
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: "amiteshsingh252@gmail.com",
-          pass: "kmlz rdak qptf cltl",
+          user: ADMIN_MAIL,
+          pass: ADMIN_MAIL_PASS,
         },
       });
 
@@ -60,7 +67,7 @@ class EmailStore {
           const htmlToSend = template(replacements);
 
           const info = await transporter.sendMail({
-            from: '"Macro Rides" <amiteshsingh252@gmail.com>',
+            from: `"Macro Rides" <${ADMIN_MAIL}>`,
             to: email,
             subject: "Your Macro Rides Vendor Account Has Been Created ✅",
             text: `Hi ${name}, your vendor account has been created. Verification may take 24–48 hours.`,
