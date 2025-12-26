@@ -1,8 +1,9 @@
 import { prisma } from "@repo/db/db";
+import { getEnv } from "./env";
 
-const email = process.env.MC_EMAIL;
-const customerId = process.env.MC_CUSTOMER_ID;
-const key = process.env.MC_KEY;
+const email = getEnv().MC_EMAIL;
+const customerId = getEnv().MC_CUSTOMER_ID;
+const key = getEnv().MC_KEY;
 
 class OtpStore {
   private static instance: OtpStore | null;

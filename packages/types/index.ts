@@ -14,6 +14,7 @@
 
 import z, { ZodError } from "zod";
 import "dotenv/config";
+import { getEnv } from "./env.js";
 
 export type kitchenState = "OPEN" | "CLOSED" | "KITCHEN_BUSY" | "";
 export type vendorType = "FOOD" | "CLOTHING";
@@ -36,7 +37,7 @@ export type useCreateRoleBasedVendorProps =
     };
 
 export const HTTP_URL =
-  process.env.NODE_ENV === "production"
+  getEnv().NODE_ENV === "production"
     ? "http://wrong:4000/api/v1"
     : "http://localhost:4000/api/v1";
 
