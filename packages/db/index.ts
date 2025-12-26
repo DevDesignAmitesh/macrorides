@@ -8,9 +8,9 @@ import {
 } from "./generated/prisma/client.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient | null };
+const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
-let prisma: PrismaClient | null = null;
+let prisma: PrismaClient;
 
 if (!globalForPrisma.prisma) {
   const adapter = new PrismaPg({
@@ -18,7 +18,8 @@ if (!globalForPrisma.prisma) {
   });
 
   prisma = new PrismaClient({ adapter });
-} else if (globalForPrisma.prisma) {
+  globalForPrisma.prisma = prisma;
+} else {
   prisma = globalForPrisma.prisma;
 }
 
