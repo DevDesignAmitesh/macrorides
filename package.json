@@ -18,8 +18,8 @@
     "build:vendor-app": "cd apps/vendor-app && pnpm build",
     "start:vendor-app": "cd apps/vendor-app && pnpm start",
     "start:be": "cd apps/http-backend && pnpm start",
-    "final:start:be": "pnpm i && pnpm run final:db && pnpm run final:build:packages && pnpm run build:be",
-    "final:start:vendor-app": "pnpm i && pnpm run final:db && pnpm run final:build:packages && pnpm run build:vendor-app"
+    "final:script:be": "pnpm i && pnpm run final:db && pnpm run final:build:packages && pnpm run build:be",
+    "final:script:vendor-app": "pnpm i && pnpm run final:db && pnpm run final:build:packages && pnpm run build:vendor-app"
   },
   "devDependencies": {
     "prettier": "^3.7.4",
