@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc -b && copyfiles -u 1 src/**/*.html dist"
   },
+  "types": "dist/index.d.ts",
   "dependencies": {
     "@repo/types": "workspace:*",
     "@repo/typescript-config": "workspace:*",

@@ -15,6 +15,7 @@
     "@repo/typescript-config": "workspace:*",
     "@repo/db": "workspace:*"
   },
+  "types": "dist/index.d.ts",
   "exports": {
     "./otp": "./dist/index.js"
   }

@@ -17,6 +17,7 @@
     "dotenv": "^17.2.3",
     "zod": "^4.2.1"
   },
+  "types": "dist/index.d.ts",
   "exports": {
     "./types": "./dist/index.js"
   }
