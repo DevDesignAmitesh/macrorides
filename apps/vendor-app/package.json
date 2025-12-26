@@ -8,7 +8,8 @@
     "build:next": "next build",
     "start": "next start",
     "lint": "eslint",
-    "build:vendor-app": "pnpm turbo run build:next --filter=vendor-app"
+    "build:packages": "cd ../../ && pnpm --filter ./packages/** build",
+    "build:vendor-app": "pnpm run build:packages && pnpm turbo run build:next --filter=vendor-app"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.8",

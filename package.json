@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "build:backend": "pnpm turbo run build:node --filter=http-backend",
-    "build:vendor-app": "pnpm turbo run build:next --filter=vendor-app",
+    "build:packages": "pnpm --filter ./packages/** build",
+    "build:vendor-app": "pnpm run build:packages && pnpm turbo run build:next --filter=vendor-app",
     "db:generate": "cd packages/db && npx prisma generate",
     "final:build:be": "pnpm run db:generate && pnpm run build:backend"
   },
@@ -13,7 +14,7 @@
     "typescript": "5.9.2"
   },
   "engines": {
-    "node": ">=18"  
+    "node": ">=18"
   },
   "packageManager": "pnpm@10.26.0"
 }
