@@ -13,7 +13,6 @@
  */
 
 import z, { ZodError } from "zod";
-import { getEnv } from "./env.js";
 
 export type kitchenState = "OPEN" | "CLOSED" | "KITCHEN_BUSY" | "";
 export type vendorType = "FOOD" | "CLOTHING";
@@ -35,10 +34,7 @@ export type useCreateRoleBasedVendorProps =
       type: "CLOTHING" | "";
     };
 
-export const HTTP_URL =
-  getEnv().NODE_ENV === "production"
-    ? "https://macrorides.onrender.com/api/v1"
-    : "http://localhost:4000/api/v1";
+export const HTTP_URL = "https://macrorides.onrender.com/api/v1";
 
 export type roles = "CUSTOMER" | "VENDOR_OWNER" | "DRIVER";
 
