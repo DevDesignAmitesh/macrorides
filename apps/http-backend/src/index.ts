@@ -28,4 +28,8 @@ app.use("/api/v1/account", accountRouter);
 app.use("/api/v1/vendors", vendorRouter);
 app.use("/api/v1/maps", mapRouter);
 
+app.get("/api/health", (_req, res) => {
+  res.json({ ok: true });
+});
+
 export default app;
