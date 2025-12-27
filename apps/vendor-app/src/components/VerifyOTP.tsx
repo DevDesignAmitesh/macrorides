@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Logo } from "./Logo";
 import { AccountOTPVerifyInput } from "@repo/types/types";
 import { useOTPVerifyAccount, useLoginAccount } from "@repo/hooks/hooks";
-import { notify } from "@/utils";
+import { HTTP_URL, notify } from "@/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const RESEND_TIMER = 50;
@@ -42,10 +42,11 @@ const VerifyOTPPage: React.FC = () => {
   const [timer, setTimer] = useState<number>(RESEND_TIMER);
 
   const { loading: loadingVerify, handleOTPVerifyAccount } =
-    useOTPVerifyAccount({ notify });
+    useOTPVerifyAccount({ notify, HTTP_URL: HTTP_URL });
 
   const { loading: loadingResend, handleLoginAccount } = useLoginAccount({
     notify,
+    HTTP_URL: HTTP_URL
   });
 
   const isLoading = loadingVerify || loadingResend;

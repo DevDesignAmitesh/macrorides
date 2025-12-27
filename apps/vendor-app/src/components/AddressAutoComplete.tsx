@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { HTTP_URL } from "@repo/types/types";
+import { HTTP_URL } from "@/utils";
 
 export interface SendMapDataToUser {
   title: string;

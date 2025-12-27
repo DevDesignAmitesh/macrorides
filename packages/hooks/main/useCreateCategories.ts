@@ -1,7 +1,6 @@
 import {
   createCategoriesSchema,
   CreateCategoryInput,
-  HTTP_URL,
   Notify,
   zodErrorMessage,
 } from "@repo/types/types";
@@ -11,11 +10,13 @@ import { useState } from "react";
 export const useCreateCategories = ({
   notify,
   vendorId,
-  token
+  token,
+  HTTP_URL
 }: {
   notify: Notify;
   vendorId: string;
   token: string;
+  HTTP_URL: string;
 }) => {
   const [loading, setloading] = useState<boolean>(false);
 

@@ -34,7 +34,8 @@ export type useCreateRoleBasedVendorProps =
       type: "CLOTHING" | "";
     };
 
-export const HTTP_URL = "https://macrorides.onrender.com/api/v1";
+export const HTTP_BACKEND_DEV_URL = "http://localhost:4000/api/v1";
+export const HTTP_BACKEND_PROD_URL = "https://macrorides.onrender.com/api/v1";
 
 export type roles = "CUSTOMER" | "VENDOR_OWNER" | "DRIVER";
 

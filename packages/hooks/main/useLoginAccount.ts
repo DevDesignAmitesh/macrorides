@@ -3,12 +3,17 @@ import {
   accountSigninSchema,
   AccountSigninInput,
   zodErrorMessage,
-  HTTP_URL,
   Notify,
 } from "@repo/types/types";
 import axios from "axios";
 
-export const useLoginAccount = ({ notify }: { notify: Notify }) => {
+export const useLoginAccount = ({
+  notify,
+  HTTP_URL,
+}: {
+  notify: Notify;
+  HTTP_URL: string;
+}) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleLoginAccount = async ({

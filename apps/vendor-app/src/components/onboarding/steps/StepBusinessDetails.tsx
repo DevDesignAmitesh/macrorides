@@ -4,13 +4,6 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { FormField } from "../FormFeild";
 import { PillSelector } from "../PillSelector";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { kitchenState, operationalState, vendorType } from "@repo/types/types";
 
 export interface FoodBusinessData {
@@ -34,8 +27,6 @@ interface StepBusinessDetailsProps {
   onClothingChange: (data: ClothingBusinessData) => void;
   errors: Partial<Record<string, string>>;
 }
-
-const KITCHEN_STATES = ["OPEN", "CLOSED", "KITCHEN_BUSY"];
 
 export function StepBusinessDetails({
   vendorType,
@@ -65,31 +56,6 @@ export function StepBusinessDetails({
             }
             maxLength={14}
           />
-        </FormField>
-
-        <FormField
-          label="Kitchen State"
-          htmlFor="kitchenState"
-          required
-          error={errors.kitchenState}
-        >
-          <Select
-            value={foodData.kitchenState}
-            onValueChange={(value) =>
-              onFoodChange({ ...foodData, kitchenState: value as kitchenState })
-            }
-          >
-            <SelectTrigger id="kitchenState">
-              <SelectValue placeholder="Select state" />
-            </SelectTrigger>
-            <SelectContent>
-              {KITCHEN_STATES.map((state) => (
-                <SelectItem key={state} value={state}>
-                  {state}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         </FormField>
 
         <div className="flex items-center justify-between p-4 bg-accent rounded-xl">

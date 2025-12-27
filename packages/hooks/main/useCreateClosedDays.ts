@@ -1,7 +1,6 @@
 import {
   CreateClosedDayInput,
   createClosedDaySchema,
-  HTTP_URL,
   Notify,
   zodErrorMessage,
 } from "@repo/types/types";
@@ -12,10 +11,12 @@ export const useCreateClosedDays = ({
   notify,
   vendorId,
   token,
+  HTTP_URL
 }: {
   notify: Notify;
   vendorId: string;
   token: string;
+  HTTP_URL: string;
 }) => {
   const [loading, setloading] = useState<boolean>(false);
 

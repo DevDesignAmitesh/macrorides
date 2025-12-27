@@ -9,7 +9,7 @@ import { Logo } from "./Logo";
 import { useCreateAccount } from "@repo/hooks/hooks";
 import { AccountSignupInput } from "@repo/types/types";
 import { useRouter } from "next/navigation";
-import { notify } from "@/utils";
+import { HTTP_URL, notify } from "@/utils";
 
 const SignupPage: React.FC = () => {
   const [formData, setFromData] = useState<AccountSignupInput>({
@@ -31,7 +31,7 @@ const SignupPage: React.FC = () => {
     router.push(`/verify-otp?phone=${formData.phone}`);
   };
 
-  const { handleCreateAccount, loading } = useCreateAccount({ notify });
+  const { handleCreateAccount, loading } = useCreateAccount({ notify, HTTP_URL: HTTP_URL });
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8">
       <div className="max-w-md w-full mx-4">
@@ -65,7 +65,7 @@ const SignupPage: React.FC = () => {
               />
             </div>
             <div className="flex flex-col justify-center items-start gap-2">
-              <Label>Owner Phone Number</Label>
+              <Label>Owner Phone Number (10 digits)</Label>
               <Input
                 value={formData.phone}
                 onChange={(e) => handleChange("phone", e.target.value)}

@@ -51,7 +51,7 @@ export const initialOnboardingData: VendorOnboardingData = {
   },
   foodBusiness: {
     fssaiNumber: "",
-    kitchenState: "",
+    kitchenState: "OPEN",
     is247: false,
     openingTime: undefined,
     closingTime: undefined,

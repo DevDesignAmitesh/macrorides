@@ -10,7 +10,10 @@ const envSchema = z.object({
   MC_KEY: z.string().min(1),
   ADMIN_MAIL_PASS: z.string().min(1),
   MAPS_CLIENT_SECRET: z.string().min(1),
-  NODE_ENV: z.enum(["development", "production", "test"]).optional(),
+  IMAGE_KIT_PUBLIC_KEY: z.string().min(1),
+  IMAGE_KIT_PRIVATE_KEY: z.string().min(1),
+  IMAGE_KIT_URL: z.string().min(1),
+  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
 });
 
 export function getEnv() {

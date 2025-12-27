@@ -1,7 +1,6 @@
 import {
   clothVendorCreateOrUpdateSchema,
   foodVendorCreateOrUpdateSchema,
-  HTTP_URL,
   Notify,
   useCreateRoleBasedVendorProps,
   zodErrorMessage,
@@ -12,11 +11,13 @@ import { useState } from "react";
 export const useCreateRoleBasedVendor = ({
   notify,
   vendorId,
+  HTTP_URL,
   token
 }: {
   notify: Notify;
   vendorId: string;
   token: string;
+  HTTP_URL: string;
 }) => {
   const [loading, setloading] = useState<boolean>(false);
 

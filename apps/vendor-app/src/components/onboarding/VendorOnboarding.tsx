@@ -21,7 +21,7 @@ import {
   useCreateRoleBasedVendor,
   useSendEmail,
 } from "@repo/hooks/hooks";
-import { notify } from "@/utils";
+import { HTTP_URL, notify } from "@/utils";
 import { StepEmailConfirmation } from "./steps/StepEmailConfirmation";
 import { StepCommissionPlan } from "./steps/StepCommissionPlan";
 import { toast } from "sonner";
@@ -117,11 +117,13 @@ export function VendorOnboarding() {
   const { loading: l1, handleCreateBaseVendor } = useCreateBaseVendor({
     token: TOKEN,
     notify: notify,
+    HTTP_URL: HTTP_URL,
   });
 
   const { loading: l2, handleCreateRoleBasedVendor } = useCreateRoleBasedVendor(
     {
       notify: notify,
+      HTTP_URL: HTTP_URL,
       vendorId: vendorId,
       token: TOKEN,
     }
@@ -129,24 +131,28 @@ export function VendorOnboarding() {
 
   const { loading: l3, handleCreateLocation } = useCreateLocation({
     notify: notify,
+    HTTP_URL: HTTP_URL,
     token: TOKEN,
     vendorId,
   });
 
   const { loading: l4, handleCreateClosedDays } = useCreateClosedDays({
     notify: notify,
+    HTTP_URL: HTTP_URL,
     vendorId: vendorId,
     token: TOKEN,
   });
 
   const { loading: l5, handleCreateCategories } = useCreateCategories({
     notify: notify,
+    HTTP_URL: HTTP_URL,
     vendorId: vendorId,
     token: TOKEN,
   });
 
   const { loading: l6, handleSendEmail } = useSendEmail({
     notify: notify,
+    HTTP_URL: HTTP_URL,
     token: TOKEN,
   });
 

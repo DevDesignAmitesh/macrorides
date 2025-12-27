@@ -1,11 +1,10 @@
+import "dotenv/config";
 import { sendEmailType } from "@repo/types/types";
 import nodemailer from "nodemailer";
 import handlebars from "handlebars";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import path from "path";
-import { getEnv } from "./env.js";
-import SMTPTransport from "nodemailer/lib/smtp-transport/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,29 +19,6 @@ class EmailStore {
     return EmailStore.instance;
   }
 
-  private getMailer(): {
-    email: string;
-    transporter: nodemailer.Transporter<
-      SMTPTransport.SentMessageInfo,
-      SMTPTransport.Options
-    >;
-  } {
-    const { ADMIN_MAIL, ADMIN_MAIL_PASS } = getEnv();
-
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: ADMIN_MAIL,
-        pass: ADMIN_MAIL_PASS,
-      },
-    });
-
-    return {
-      transporter,
-      email: ADMIN_MAIL,
-    };
-  }
-
   public async sendEmail({
     email,
     name,
@@ -54,7 +30,15 @@ class EmailStore {
   }): Promise<{ success: boolean }> {
     try {
       // nodemailer code
-      const transporter = this.getMailer();
+      const { ADMIN_MAIL, ADMIN_MAIL_PASS } = process.env;
+
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: ADMIN_MAIL,
+          pass: ADMIN_MAIL_PASS,
+        },
+      });
 
       const templatePath =
         type === "VENDOR_ONBOARDING_CONFIRMATION"
@@ -78,8 +62,8 @@ class EmailStore {
 
           const htmlToSend = template(replacements);
 
-          const info = await transporter.transporter.sendMail({
-            from: `"Macro Rides" <${transporter.email}>`,
+          const info = await transporter.sendMail({
+            from: `"Macro Rides" <${ADMIN_MAIL}>`,
             to: email,
             subject: "Your Macro Rides Vendor Account Has Been Created ✅",
             text: `Hi ${name}, your vendor account has been created. Verification may take 24–48 hours.`,
@@ -91,8 +75,8 @@ class EmailStore {
         }
       );
       return { success: finalRes };
-    } catch (emailError) {
-      console.log(emailError);
+    } catch (e) {
+      console.log("error in send email", e);
       return { success: false };
     }
   }

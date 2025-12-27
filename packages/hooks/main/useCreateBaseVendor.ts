@@ -1,5 +1,4 @@
 import {
-  HTTP_URL,
   Notify,
   VendorCreateInput,
   vendorCreateSchema,
@@ -11,9 +10,11 @@ import { useState } from "react";
 export const useCreateBaseVendor = ({
   notify,
   token,
+  HTTP_URL
 }: {
   notify: Notify;
   token: string;
+  HTTP_URL: string;
 }) => {
   const [loading, setloading] = useState<boolean>(false);
 

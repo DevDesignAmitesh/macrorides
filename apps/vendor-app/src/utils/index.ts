@@ -1,4 +1,8 @@
-import { Notify } from "@repo/types/types";
+import {
+  HTTP_BACKEND_DEV_URL,
+  HTTP_BACKEND_PROD_URL,
+  Notify,
+} from "@repo/types/types";
 import {
   Store,
   BarChart3,
@@ -50,3 +54,8 @@ export const notify: Notify = {
     toast.success(msg);
   },
 };
+
+export const HTTP_URL =
+  process.env.NEXT_PUBLIC_NODE_ENV === "production"
+    ? HTTP_BACKEND_PROD_URL
+    : HTTP_BACKEND_DEV_URL;

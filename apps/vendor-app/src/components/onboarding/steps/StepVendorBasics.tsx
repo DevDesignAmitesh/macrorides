@@ -72,7 +72,7 @@ export function StepVendorBasics({
 
       <div className="grid md:grid-cols-2 gap-4">
         <FormField
-          label="Outlet Contact Number"
+          label="Outlet Contact Number (10 digits)"
           htmlFor="contact"
           required
           error={errors.contactNumber}

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Logo } from "./Logo";
 import { useLoginAccount } from "@repo/hooks/hooks";
-import { notify } from "@/utils";
+import { HTTP_URL, notify } from "@/utils";
 import { useRouter } from "next/navigation";
 
 const LoginPage: React.FC = () => {
@@ -18,7 +18,10 @@ const LoginPage: React.FC = () => {
     router.push(`/verify-otp?phone=${phone}`);
   };
 
-  const { loading, handleLoginAccount } = useLoginAccount({ notify });
+  const { loading, handleLoginAccount } = useLoginAccount({
+    notify,
+    HTTP_URL: HTTP_URL,
+  });
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8">
       <div className="max-w-md w-full mx-4">
@@ -44,7 +47,7 @@ const LoginPage: React.FC = () => {
             className="space-y-6"
           >
             <div className="flex flex-col justify-center items-start gap-2">
-              <Label>Owner Phone Number</Label>
+              <Label>Owner Phone Number (10 digits)</Label>
               <Input
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}

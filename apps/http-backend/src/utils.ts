@@ -7,7 +7,7 @@ import ImageKit from "imagekit";
 import crypto from "crypto";
 import { getEnv } from "./evn";
 
-export const JWT_SECRET = getEnv().JWT_SECRET
+export const JWT_SECRET = getEnv().JWT_SECRET;
 
 export const responsePlate = ({
   res,
@@ -83,9 +83,9 @@ export function verifyToken({ token }: { token: string }) {
 }
 
 const imagekit = new ImageKit({
-  publicKey: "public_SsE5cL/lvAkiOiNxANbYTlGfHoU=",
-  privateKey: "private_8bjQ9EbytJ5J+q2oS5r07nJEqMI=",
-  urlEndpoint: "https://ik.imagekit.io/d1l8thbvky",
+  publicKey: getEnv().IMAGE_KIT_PUBLIC_KEY!,
+  privateKey: getEnv().IMAGE_KIT_PRIVATE_KEY!,
+  urlEndpoint: getEnv().IMAGE_KIT_URL!,
 });
 
 // Type helper (same as Cloudinary)

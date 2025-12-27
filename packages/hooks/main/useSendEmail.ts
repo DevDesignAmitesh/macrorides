@@ -1,5 +1,4 @@
 import {
-  HTTP_URL,
   Notify,
   SendEmailInput,
   sendEmailSchema,
@@ -11,9 +10,11 @@ import { useState } from "react";
 export const useSendEmail = ({
   notify,
   token,
+  HTTP_URL,
 }: {
   notify: Notify;
   token: string;
+  HTTP_URL: string;
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
 

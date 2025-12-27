@@ -3,12 +3,17 @@ import {
   accountOTPVerifySchema,
   AccountOTPVerifyInput,
   zodErrorMessage,
-  HTTP_URL,
   Notify,
 } from "@repo/types/types";
 import axios from "axios";
 
-export const useOTPVerifyAccount = ({ notify }: { notify: Notify }) => {
+export const useOTPVerifyAccount = ({
+  notify,
+  HTTP_URL,
+}: {
+  notify: Notify;
+  HTTP_URL: string;
+}) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleOTPVerifyAccount = async ({

@@ -1,7 +1,6 @@
 import {
   createLocationSchema,
   CreateVendorLocationInput,
-  HTTP_URL,
   Notify,
   zodErrorMessage,
 } from "@repo/types/types";
@@ -11,11 +10,13 @@ import { useState } from "react";
 export const useCreateLocation = ({
   notify,
   token,
-  vendorId
+  vendorId,
+  HTTP_URL
 }: {
   notify: Notify;
   token: string;
   vendorId: string;
+  HTTP_URL: string;
 }) => {
   const [loading, setloading] = useState<boolean>(false);
 
