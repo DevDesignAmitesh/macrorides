@@ -57,7 +57,7 @@ export const initialOnboardingData: VendorOnboardingData = {
     closingTime: undefined,
   },
   clothingBusiness: {
-    operationalState: "",
+    operationalState: "OPEN",
     returnPolicy: "",
   },
   location: {

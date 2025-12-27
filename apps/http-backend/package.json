@@ -10,9 +10,10 @@
     "start": "node dist/bin.js",
     "build:packages": "cd ../../ && pnpm --filter ./packages/** build",
     "build:types": "pnpm --filter @repo/types build",
+    "build:maps": "pnpm --filter @repo/maps build",
     "build:db": "pnpm --filter @repo/db build",
     "generate:db": "cd ../../ && cd packages/db && npx prisma generate",
-    "build:http-backend": "pnpm run generate:db && pnpm run build:types && pnpm run build:db && pnpm run build:packages && pnpm turbo run build:node --filter=http-backend"
+    "build:http-backend": "pnpm run generate:db && pnpm run build:types && pnpm run build:maps && pnpm run build:db && pnpm run build:packages && pnpm turbo run build:node --filter=http-backend"
   },
   "devDependencies": {
     "@repo/db": "workspace:*",

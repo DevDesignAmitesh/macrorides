@@ -3,7 +3,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { FormField } from "../FormFeild";
-import { PillSelector } from "../PillSelector";
 import { kitchenState, operationalState, vendorType } from "@repo/types/types";
 
 export interface FoodBusinessData {
@@ -118,28 +117,6 @@ export function StepBusinessDetails({
   // CLOTHING vendor
   return (
     <div className="space-y-6 animate-slide-in-right">
-      <FormField
-        label="Operational State"
-        htmlFor="operationalState"
-        required
-        error={errors.operationalState}
-      >
-        <PillSelector
-          options={[
-            { value: "OPEN", label: "Open" },
-            { value: "CLOSED", label: "Closed" },
-            { value: "MAINTENANCE", label: "Maintenance" },
-          ]}
-          value={clothingData.operationalState}
-          onChange={(value) =>
-            onClothingChange({
-              ...clothingData,
-              operationalState: value as "OPEN" | "CLOSED" | "MAINTENANCE",
-            })
-          }
-        />
-      </FormField>
-
       <FormField
         label="Return Policy"
         htmlFor="returnPolicy"
