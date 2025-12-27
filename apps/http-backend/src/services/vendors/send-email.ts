@@ -48,7 +48,6 @@ export const sendEmailService = async (req: Request, res: Response) => {
     const emailRes = await emailStore.sendEmail({
       email: account.email!,
       name: account.name,
-      type,
     });
 
     if (!emailRes.success) {

@@ -12,10 +12,11 @@
     "build:types": "pnpm --filter @repo/types build",
     "build:maps": "pnpm --filter @repo/maps build",
     "build:email": "pnpm --filter @repo/email build",
+    "build:ui": "pnpm --filter @repo/ui build",
     "build:otp": "pnpm --filter @repo/otp build",
     "build:db": "pnpm --filter @repo/db build",
     "generate:db": "cd ../../ && cd packages/db && npx prisma generate",
-    "build:http-backend": "pnpm run generate:db && pnpm run build:types && pnpm run build:email && pnpm run build:maps && pnpm run build:db && pnpm run build:otp && pnpm run build:packages && pnpm turbo run build:node --filter=http-backend"
+    "build:http-backend": "pnpm run generate:db && pnpm run build:types && pnpm run build:ui && pnpm run build:email && pnpm run build:maps && pnpm run build:db && pnpm run build:otp && pnpm run build:packages && pnpm turbo run build:node --filter=http-backend"
   },
   "devDependencies": {
     "@repo/db": "workspace:*",

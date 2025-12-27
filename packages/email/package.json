@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc -b && copyfiles -u 1 src/**/*.html dist"
+    "build": "tsc -b"
   },
   "types": "dist/index.d.ts",
   "dependencies": {
     "@repo/types": "workspace:*",
+    "@repo/ui": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/nodemailer": "^7.0.4",
     "dotenv": "^17.2.3",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@types/node": "^25.0.3",
+    "@types/react": "^19.2.7",
     "copyfiles": "^2.4.1"
   }
 }
