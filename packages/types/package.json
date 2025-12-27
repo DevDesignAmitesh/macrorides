@@ -1,7 +1,7 @@
 {
   "name": "@repo/types",
   "module": "index.ts",
-  "type": "module",
+  "type": "commonjs",
   "private": true,
   "scripts": {
     "build": "tsc -b"
