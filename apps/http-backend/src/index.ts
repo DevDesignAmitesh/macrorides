@@ -34,4 +34,4 @@ app.get("/api/health", (_req, res) => {
   res.send("good hai");
 });
 
-app.listen(PORT, () => console.log("code is running at ", PORT));
+export default app;
