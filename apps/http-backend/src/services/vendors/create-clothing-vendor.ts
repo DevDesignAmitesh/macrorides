@@ -27,8 +27,16 @@ export const createClothingVendorService = async (
     const { operationalState, returnPolicy, vendorId } = data;
 
     await prisma.clothVendor
-      .create({
-        data: {
+      .upsert({
+        where: {
+          vendorId,
+        },
+        create: {
+          operationalState,
+          returnPolicy,
+          vendorId,
+        },
+        update: {
           operationalState,
           returnPolicy,
           vendorId,
@@ -40,8 +48,8 @@ export const createClothingVendorService = async (
           message: "cloth vendor created",
           status: 201,
           data: {
-            vendorId: data.id 
-          }
+            vendorId: data.id,
+          },
         });
       })
       .catch((err) => {

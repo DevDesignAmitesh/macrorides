@@ -31,8 +31,16 @@ export const createFoodVendorService = async (req: Request, res: Response) => {
     } = data;
 
     await prisma.$transaction(async (tx) => {
-      await tx.foodVendor.create({
-        data: {
+      await tx.foodVendor.upsert({
+        where: {
+          vendorId,
+        },
+        update: {
+          fssaiNumber,
+          kitchenState,
+          vendorId,
+        },
+        create: {
           fssaiNumber,
           kitchenState,
           vendorId,
@@ -46,7 +54,7 @@ export const createFoodVendorService = async (req: Request, res: Response) => {
           },
           data: {
             openingTime,
-            closingTime
+            closingTime,
           },
         });
       }
