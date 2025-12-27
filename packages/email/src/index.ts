@@ -5,7 +5,6 @@ import handlebars from "handlebars";
 import fs from "fs";
 import path from "path";
 
-const __dirname = path.dirname(__filename);
 
 class EmailStore {
   private static instance: EmailStore;
