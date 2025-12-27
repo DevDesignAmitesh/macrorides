@@ -165,8 +165,8 @@ model Vendor {
   isVerified    Boolean    @default(false)
   gstNumber     String?
   contactNumber String    @unique
-  openingTime  DateTime?
-  closingTime  DateTime?
+  openingTime  String?
+  closingTime  String?
   is247        Boolean      @default(false)
 
 

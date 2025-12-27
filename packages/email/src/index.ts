@@ -5,7 +5,6 @@ import handlebars from "handlebars";
 import fs from "fs";
 import path from "path";
 
-
 class EmailStore {
   private static instance: EmailStore;
 
@@ -26,7 +25,7 @@ class EmailStore {
     type: sendEmailType;
   }): Promise<{ success: boolean }> {
     try {
-      console.log(process.env.RESEND_API_KEY)
+      console.log(process.env.RESEND_API_KEY);
       const resend = new Resend(process.env.RESEND_API_KEY);
 
       const templatePath =

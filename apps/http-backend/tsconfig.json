@@ -3,25 +3,5 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src"
-  },
-  "references": [
-    {
-      "path": "../../packages/types"
-    },
-    {
-      "path": "../../packages/db"
-    },
-    {
-      "path": "../../packages/otp"
-    },
-    {
-      "path": "../../packages/hooks"
-    },
-    {
-      "path": "../../packages/email"
-    },
-    {
-      "path": "../../packages/maps"
-    }
-  ]
+  }
 }

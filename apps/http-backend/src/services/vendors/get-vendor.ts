@@ -76,11 +76,11 @@ export const getVendorService = async (req: Request, res: Response) => {
       updatedAt: vendor.updatedAt.toISOString(),
       clothVendor: vendor.clothVendor,
       foodVendor: vendor.foodVendor && {
-        closingTime: vendor.closingTime?.toISOString(),
+        closingTime: vendor.closingTime ?? "",
         fssaiNumber: vendor.foodVendor.fssaiNumber,
         is247: vendor.is247,
         kitchenState: vendor.foodVendor.kitchenState,
-        openingTime: vendor.openingTime?.toISOString(),
+        openingTime: vendor.openingTime ?? "",
       },
     };
 

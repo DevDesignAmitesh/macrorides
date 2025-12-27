@@ -45,8 +45,8 @@ export const createFoodVendorService = async (req: Request, res: Response) => {
             id: vendorId,
           },
           data: {
-            openingTime: new Date(openingTime),
-            closingTime: new Date(closingTime),
+            openingTime,
+            closingTime
           },
         });
       }
