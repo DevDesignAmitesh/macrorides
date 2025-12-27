@@ -7,7 +7,9 @@
     "build": "tsc -b",
     "build:node": "tsc -b",
     "dev": "pnpm run build && pnpm run start",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "build:packages": "cd ../../ && pnpm --filter ./packages/** build",
+    "build:http-backend": "pnpm run build:packages && pnpm turbo run build:node --filter=http-backend"
   },
   "devDependencies": {
     "@repo/db": "workspace:*",
