@@ -1,12 +1,4 @@
 import { SendMapDataToUser } from "@repo/types/types";
-import { getEnv } from "./env";
-
-const MAPS_CLIENT_SECRET = getEnv().MAPS_CLIENT_SECRET;
-const MAPS_CLIENT_ID = getEnv().MAPS_CLIENT_ID;
-
-if (!MAPS_CLIENT_ID || !MAPS_CLIENT_SECRET) {
-  throw new Error("envs not found");
-}
 
 class Maps {
   private static instance: Maps | null = null;
@@ -25,8 +17,8 @@ class Maps {
     const saved_envs = {
       grant_type: "client_credentials",
       scope: "openid",
-      client_id: MAPS_CLIENT_ID!,
-      client_secret: MAPS_CLIENT_SECRET!,
+      client_id: process.env.MAPS_CLIENT_ID!,
+      client_secret: process.env.MAPS_CLIENT_SECRET!,
     };
     // Convert object to URL-encoded string
 
