@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { sendEmailType } from "@repo/types/types";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import handlebars from "handlebars";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -29,16 +29,8 @@ class EmailStore {
     type: sendEmailType;
   }): Promise<{ success: boolean }> {
     try {
-      // nodemailer code
-      const { ADMIN_MAIL, ADMIN_MAIL_PASS } = process.env;
-
-      const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: ADMIN_MAIL,
-          pass: ADMIN_MAIL_PASS,
-        },
-      });
+      console.log(process.env.RESEND_API_KEY)
+      const resend = new Resend(process.env.RESEND_API_KEY);
 
       const templatePath =
         type === "VENDOR_ONBOARDING_CONFIRMATION"
@@ -62,15 +54,15 @@ class EmailStore {
 
           const htmlToSend = template(replacements);
 
-          const info = await transporter.sendMail({
-            from: `"Macro Rides" <${ADMIN_MAIL}>`,
+          const info = await resend.emails.send({
+            from: `noreply@macrorides.com`,
             to: email,
             subject: "Your Macro Rides Vendor Account Has Been Created ✅",
             text: `Hi ${name}, your vendor account has been created. Verification may take 24–48 hours.`,
             html: htmlToSend,
           });
 
-          console.log("Message sent:", info.messageId);
+          console.log("Message sent:", info.data);
           return true;
         }
       );

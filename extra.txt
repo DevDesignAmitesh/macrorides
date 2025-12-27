@@ -1,13 +1,3 @@
-for deploying backend on the vercel
-  - pnpm i
-  - migrate db
-  - generate db
-  - build all packages (one by one) => types => db => rest of the all
-  - building the http-backend
-  - running the http-backend start command
+last todo
 
-for deploying frontend on the vercel
-  - pnpm i
-  - build all packages (one by one)
-  - building vendor-app
-  - running the vendor-app start command
+- asking shreyas for testing
