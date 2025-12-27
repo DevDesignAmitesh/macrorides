@@ -5,11 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:next": "next build",
+    "build:next"
+    : "next build",
     "start": "next start",
     "lint": "eslint",
-    "build:packages": "cd ../../ && pnpm --filter ./packages/** build",
-    "build:vendor-app": "pnpm run build:packages && pnpm turbo run build:next --filter=vendor-app"
+    "build:types": "pnpm --filter @repo/types build",
+    "build:hooks": "pnpm --filter @repo/hooks build",
+    "build:vendor-app": "pnpm run build:types && pnpm run build:hooks && pnpm turbo run build:next --filter=vendor-app"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.8",
