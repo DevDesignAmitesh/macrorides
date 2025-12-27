@@ -51,8 +51,6 @@ export const sendEmailService = async (req: Request, res: Response) => {
       type,
     });
 
-    // handle nodemailer error more grcelfully
-
     if (!emailRes.success) {
       return responsePlate({
         res,

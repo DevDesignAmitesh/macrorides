@@ -55,7 +55,7 @@ export const notify: Notify = {
   },
 };
 
-export const HTTP_URL =
+export const HTTP_URL = 
   process.env.NEXT_PUBLIC_NODE_ENV === "production"
     ? HTTP_BACKEND_PROD_URL
     : HTTP_BACKEND_DEV_URL;

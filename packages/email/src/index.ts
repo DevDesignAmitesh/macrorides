@@ -32,6 +32,8 @@ class EmailStore {
         type === "VENDOR_ONBOARDING_CONFIRMATION"
           ? path.join(__dirname, "vendor-onboarding.html")
           : "";
+          
+      console.log("__dirname:", __dirname);
 
       const finalRes = await this.readHTMLTemplate(
         templatePath,
@@ -51,7 +53,7 @@ class EmailStore {
           const htmlToSend = template(replacements);
 
           const info = await resend.emails.send({
-            from: `noreply@macrorides.com`,
+            from: `no-reply@macrorides.com`,
             to: email,
             subject: "Your Macro Rides Vendor Account Has Been Created ✅",
             text: `Hi ${name}, your vendor account has been created. Verification may take 24–48 hours.`,
@@ -76,7 +78,7 @@ class EmailStore {
     return new Promise<boolean>((resolve) => {
       fs.readFile(path, { encoding: "utf-8" }, async (err, html) => {
         if (err) {
-          resolve(await callback(err));
+          return resolve(await callback(err));
         }
         resolve(await callback(null, html));
       });
