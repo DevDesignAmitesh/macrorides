@@ -5,6 +5,7 @@ import { accountRouter } from "./routes/account";
 import { vendorRouter } from "./routes/vendor";
 import cors from "cors";
 import { mapRouter } from "./routes/map";
+import { driverRouter } from "./routes/driver";
 
 export const app: Express = express();
 export const PORT = 4000;
@@ -29,6 +30,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/account", accountRouter);
 app.use("/api/v1/vendors", vendorRouter);
 app.use("/api/v1/maps", mapRouter);
+app.use("/api/v1/driver", driverRouter);
 
 app.get("/api/health", (_req, res) => {
   res.send("good hai");

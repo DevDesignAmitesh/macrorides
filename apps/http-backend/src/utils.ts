@@ -47,12 +47,15 @@ const roleCreateMap = {
 
   VENDOR_OWNER: (tx: any, accountId: string) =>
     tx.vendorOwner.create({ data: { accountId } }),
+
+  DRIVER: (tx: any, accountId: string) =>
+    tx.driver.create({ data: { accountId } }),
 };
 
 export async function createAccountWithRole(
   name: string,
   phone: string,
-  role: "CUSTOMER" | "VENDOR_OWNER"
+  role: roles
 ) {
   return prisma.$transaction(async (tx) => {
     const account = await tx.account.create({

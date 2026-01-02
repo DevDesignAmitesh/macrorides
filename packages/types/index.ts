@@ -35,7 +35,8 @@ export type useCreateRoleBasedVendorProps =
     };
 
 export const HTTP_BACKEND_DEV_URL = "http://localhost:4000/api/v1";
-export const HTTP_BACKEND_PROD_URL = "https://macrorides-http-backend.vercel.app/api/v1";
+export const HTTP_BACKEND_PROD_URL =
+  "https://macrorides-http-backend.vercel.app/api/v1";
 
 export type roles = "CUSTOMER" | "VENDOR_OWNER" | "DRIVER";
 
@@ -63,7 +64,7 @@ export const accountSignupSchema = z.object({
   name: z.string().min(3, "name is too short"),
 
   // From vendor portal always send "VENDOR_OWNER"
-  role: z.enum(["CUSTOMER", "VENDOR_OWNER"]),
+  role: z.enum(["CUSTOMER", "VENDOR_OWNER", "DRIVER"]),
 });
 
 /**
@@ -147,6 +148,48 @@ export const accountSigninSchema = z.object({
 /* ============================================================
    VENDOR MODULE
    ============================================================ */
+
+/**
+ *  POST
+ *   /vendor/personal-details
+ */
+
+export type gender = "MALE" | "FEMALE" | "OTHER";
+
+export const personalDetailsSchema = z.object({
+  gender: z.enum(["MALE", "FEMALE", "OTHER"]),
+  isPolicyAccepted: z.boolean(),
+});
+
+/**
+ * POST
+ * /vendors/vehicle-basic-info
+ */
+export type vehicleType = "TWO_WHEELER" | "THREE_WHEELER" | "FOUR_WHEELER";
+export type vehicleOwnershipStatus = "OWNED" | "RENTED";
+
+export const vehicleBasicInfoSchema = z.object({
+  registrationNumber: z.string(),
+  color: z.string(),
+  identificationNumber: z.string().optional(),
+  rcNumber: z.string(),
+  range: z.string(),
+  type: z.enum(["TWO_WHEELER", "THREE_WHEELER", "FOUR_WHEELER"]),
+  ownershipStatus: z.enum(["OWNED", "RENTED"]),
+  isElectric: z.boolean(),
+});
+
+/**
+ * POST
+ * /vendors/bank-details
+ */
+
+export const bankDetailsSchema = z.object({
+  accountHolderName: z.string(),
+  bankName: z.string(),
+  accountNumber: z.string(),
+  ifscCode: z.string(),
+});
 
 /**
  * POST

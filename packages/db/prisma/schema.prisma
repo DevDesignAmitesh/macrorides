@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider   = "prisma-client"
+  output     = "../generated/prisma"
   engineType = "binary"
 }
 
@@ -115,6 +115,23 @@ enum locationLabel {
   DROP
 }
 
+enum gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum vehicleType {
+  TWO_WHEELER
+  THREE_WHEELER
+  FOUR_WHEELER
+}
+
+enum ownershipStatus {
+  OWNED
+  RENTED
+}
+
 model Account {
   id         String  @id @default(uuid())
   phone      String  @unique
@@ -125,6 +142,7 @@ model Account {
   customer    Customer?
   vendorOwner VendorOwner?
   driver      Driver?
+  bankDetails BankDetails?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -145,7 +163,7 @@ model Customer {
 }
 
 model VendorOwner {
-  id        String  @id @default(uuid())
+  id String @id @default(uuid())
 
   accountId String  @unique
   account   Account @relation(references: [id], fields: [accountId])
@@ -164,11 +182,10 @@ model Vendor {
   type          vendorType
   isVerified    Boolean    @default(false)
   gstNumber     String?
-  contactNumber String    @unique
-  openingTime  String?
-  closingTime  String?
-  is247        Boolean      @default(false)
-
+  contactNumber String     @unique
+  openingTime   String?
+  closingTime   String?
+  is247         Boolean    @default(false)
 
   location   VendorSavedLocation[]
   closedDays ClosedDays[]
@@ -228,8 +245,10 @@ model ClothVendor {
 }
 
 model Driver {
-  id         String  @id @default(uuid())
-  isVerified Boolean
+  id              String                 @id @default(uuid())
+  isVerified      Boolean                @default(false)
+  personalDetails DriverPersonalDetails?
+  vehicleDetails  DriverVehicleDetails?
 
   accountId String  @unique
   account   Account @relation(references: [id], fields: [accountId])
@@ -240,6 +259,56 @@ model Driver {
   location      DriverLocation?
   wallet        Wallet?
   status        DriverStatus?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BankDetails {
+  id                String @id @default(uuid())
+  accountHolderName String
+  bankName          String
+  accountNumber     String
+  ifscCode          String
+
+  accountId String  @unique
+  account   Account @relation(references: [id], fields: [accountId])
+}
+
+model DriverPersonalDetails {
+  id String @id @default(uuid())
+
+  license               String?
+  aadhaarCard           String?
+  vehicleOwnerShipProof String?
+
+  driverId String @unique
+  driver   Driver @relation(references: [id], fields: [driverId])
+
+  gender           gender
+  isPolicyAccepted Boolean
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DriverVehicleDetails {
+  id String @id @default(uuid())
+
+  registrationNumber   String
+  color                String
+  rcNumber             String
+  identificationNumber String?
+  range                String
+  type                 vehicleType
+  ownershipStatus      ownershipStatus
+  isElectric           Boolean
+  insurance            String?
+  rc                   String?
+  image                String?
+
+  driverId String @unique
+  driver   Driver @relation(references: [id], fields: [driverId])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -290,10 +359,10 @@ model UserSavedLocation {
 }
 
 model VendorSavedLocation {
-  id           String @id @default(uuid())
-  
+  id String @id @default(uuid())
+
   // this will come from that particular vendor for which we are adding or updating
-  contactPhone String 
+  contactPhone String
 
   locationId String
   location   Location @relation(references: [id], fields: [locationId])
